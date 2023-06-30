@@ -40,7 +40,11 @@ const MainPage = ({navigation}) => {
     navigation.navigate('first')
   }
   const contactHandle=()=>{
-    navigation.navigate('chat', {profile:{url:'https://picsum.photos/200/300', name:'Layla Rose', status:'Online'},pagei:'MainIs'});
+    // navigation.navigate('chat', {profile:{url:'https://picsum.photos/200/300', name:'Layla Rose', status:'Online'},pagei:'MainIs'});
+    // console.log(navigation.navigate('chat'));
+    navigation.navigate('chatingScreen', {profile:{url:'https://picsum.photos/200/300', name:'Layla Rose', status:'Online'}, pagei:'whatever'});
+    // navigation.setParams('hello world')
+    // navigation.navigate('chatScreen')
   }
   return (
     <View style={styles.container}>
