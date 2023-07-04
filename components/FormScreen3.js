@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
+import Header from "./Header";
 
 const FormScreen3 = ({navigation}) => {
   const [checked, setChecked] = useState("first");
@@ -17,9 +18,10 @@ const FormScreen3 = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
-      <View style={{ position: "absolute", bottom: 10, alignSelf: "center" }}>
+      <Header navigation={navigation} />
+      {/* <View style={{ position: "absolute", bottom: 10, alignSelf: "center" }}>
         <Button title="Next" onPress={handleNext} />
-      </View>
+      </View> */}
       {/* <Header navigation={navigation} />  */}
       <View style={{ position: "absolute", bottom: 10, alignSelf: "center" }}>
         <Button title="Next" onPress={handleNext} />
@@ -27,8 +29,8 @@ const FormScreen3 = ({navigation}) => {
       <View
         style={{
           justifyContent: "center",
-          alignItems: "center",
-          paddingHorizontal: 15,
+          alignItems: "flex-start",
+          paddingHorizontal: 25,
           position: "relative",
           bottom: 20,
         }}
@@ -65,8 +67,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 40,
-    alignItems: "flex-start",
+    paddingTop: 20,
+    // alignItems: "flex-start",
   },
   textStyle: {
     fontSize: 20,

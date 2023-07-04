@@ -40,7 +40,7 @@ import {
           ))}
         </ScrollView>
         <View style={{paddingVertical:15}}>
-          <TypeMsg text={text} setFunction={(newText)=>setText(newText)} />
+          <TypeMsg text={text} setFunction={(newText)=>setText(newText)} placeholderText={'message'} icon={'images'} />
         </View>
       </SafeAreaView>
     );

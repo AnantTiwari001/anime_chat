@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "461856320715",
+    "project_id": "rough-bb778",
+    "storage_bucket": "rough-bb778.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461856320715:android:a6d34fdd14cca9c36c7f4e",
+        "android_client_info": {
+          "package_name": "com.kali0charan.anime_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461856320715-827ug2huut7vqe6v0l21cqllspalvu2n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kali0charan.anime_chat",
+            "certificate_hash": "9cfe04210dfb22597953c61c6962d84c11372f20"
+          }
+        },
+        {
+          "client_id": "461856320715-csjce2ijq7s9i1uj0t3ccv6lo0mg7uor.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kali0charan.anime_chat",
+            "certificate_hash": "8323213934b55f9a640ab50920e6fe2d8059eebc"
+          }
+        },
+        {
+          "client_id": "461856320715-bms627uitm8mkuh7gog3rmpoemt2v7sl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP6zDpaSPfMY5nd62BX9S0qpDtNu7SAHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461856320715-bms627uitm8mkuh7gog3rmpoemt2v7sl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import Header from './Header';
 
 const FormScreen0=({navigation})=>{
     const [checked, setChecked] = useState('second');
@@ -9,6 +10,7 @@ const FormScreen0=({navigation})=>{
     }
     return(
         <View style={styles.container}>
+          <Header navigation={navigation} />
     <View style={{position:'absolute', bottom:10,alignSelf:'center'}} >
       <Button title='Next' onPress={handleNext} />
     </View>
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
+      paddingVertical:20
       // alignItems: 'center',
       // justifyContent: 'center',
     },

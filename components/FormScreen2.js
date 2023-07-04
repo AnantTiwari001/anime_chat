@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Button,
 } from "react-native";
+import Header from "./Header";
 
 const FormScreen2 = ({navigation}) => {
   const [checked, setChecked] = useState(25);
@@ -18,13 +19,14 @@ const FormScreen2 = ({navigation}) => {
   }
   return (
     <View style={styles.container}>
+      <Header navigation={navigation} />
       <View style={{ position: "absolute", bottom: 10, alignSelf: "center" }}>
         <Button title="Next" onPress={handleNext} />
       </View>
       <View style={styles.main}>
         <Text style={styles.textStyle}>How old is the AI bot...</Text>
       </View>
-      <View style={{ overflow: "hidden", position: "relative" }}>
+      <View style={{ overflow: "hidden", position: "relative", paddingHorizontal:30 }}>
         {/* <ImageBackground source={require('../assets/white.png')} blurRadius={6} style={{width:20,height:80, position:'absolute', zIndex:12}}/>
       <ImageBackground source={require('../assets/white.png')} blurRadius={6} style={{width:20,height:80, position:'absolute', right:0, zIndex:12}}/> */}
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -52,7 +54,7 @@ const FormScreen2 = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
+    paddingTop:20
   },
   main: {
     justifyContent: "center",

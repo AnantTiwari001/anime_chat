@@ -9,6 +9,8 @@ import {
   ScrollView,
 } from "react-native";
 
+import SearchBar from "../components/SearchBar";
+
 import { useRef, useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 
@@ -76,17 +78,11 @@ const NewTabPage = () => {
     },
   ];
   return (
-    <View style={{ flex: 1, backgroundColor: "#9090f0", paddingTop:30}}>
-      <View
-        style={{
-          // borderWidth: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 40,
-          alignItems: "center",
-          marginBottom:10
-        }}
-      >
+    <View style={{ flex: 1, backgroundColor: "#9090f0", paddingTop: 30 }}>
+      <View style={{ paddingHorizontal:15, marginBottom:7 }}>
+        <SearchBar />
+      </View>
+      <View style={styles.headerContainer}>
         <TouchableOpacity
           style={{ flexDirection: "row", alignItems: "center" }}
         >
@@ -103,9 +99,9 @@ const NewTabPage = () => {
             alignItems: "center",
             height: 25,
             justifyContent: "space-evenly",
-            flexDirection:'row',
-            borderRadius:15,
-            backgroundColor:'gray'
+            flexDirection: "row",
+            borderRadius: 15,
+            backgroundColor: "gray",
           }}
         >
           <Image
@@ -129,9 +125,9 @@ const NewTabPage = () => {
                 {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {items[index + 1] ? (
-                  <Card item={items[index + 1]} key={index+1} />
+                  <Card item={items[index + 1]} key={index + 1} />
                 ) : (
-                  <Card item={items[0]} hidden={true} key={index+1} />
+                  <Card item={items[0]} hidden={true} key={index + 1} />
                 )}
               </View>
             ) : (
@@ -233,6 +229,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: "center",
     marginVertical: 4,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 40,
+    alignItems: "center",
+    marginBottom: 10,
   },
 });
 
