@@ -101,7 +101,8 @@ export default function App() {
         shouldPlaySound: true,
         shouldSetBadge: false,
       }),
-    })
+    });
+    
   },[])
   return (
     <NavigationContainer>
