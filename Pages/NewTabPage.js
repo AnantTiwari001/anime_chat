@@ -120,14 +120,14 @@ const NewTabPage = () => {
         </View> */}
           {items.map((item, index) =>
             index % 2 == 0 ? (
-              <View style={{ flexDirection: "row" }} key={index}>
-                <Card item={item} key={index} />
+              <View style={{ flexDirection: "row" }} key={Math.random()*1000} >
+                <Card item={item} />
                 {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {items[index + 1] ? (
-                  <Card item={items[index + 1]} key={index + 1} />
+                  <Card item={items[index + 1]} />
                 ) : (
-                  <Card item={items[0]} hidden={true} key={index + 1} />
+                  <Card item={items[0]} hidden={true}/>
                 )}
               </View>
             ) : (

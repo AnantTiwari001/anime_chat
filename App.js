@@ -94,7 +94,14 @@ export default function App() {
   }
 
   useEffect(()=>{
-    roughe()
+    roughe();
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    })
   },[])
   return (
     <NavigationContainer>
