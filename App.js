@@ -3,13 +3,10 @@ import {
   Text,
   View,
   StatusBar,
-  PermissionsAndroid,
-  Alert
 } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { NavigationActions } from "react-navigation";
 import NewTabPage from "./Pages/NewTabPage";
 import Feedback from "./components/Feedback";
 import MainPage from "./Pages/MainPage";
@@ -23,7 +20,7 @@ import FormScreen4 from "./components/FormScreen4";
 import ChatingPage from "./Pages/ChatsPage";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect } from "react";
-import messaging from "@react-native-firebase/messaging";
+import * as Notifications from 'expo-notifications'
 
 const NewAnime = createNativeStackNavigator();
 
@@ -57,63 +54,48 @@ function ChatScreen() {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log("Authorization status:", authStatus);
+  const registerForPushNotificationsAsync = async () => {
+    try {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync()
+      let finalStatus = existingStatus
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync()
+        finalStatus = status
+      }
+      if (finalStatus !== 'granted') {
+        throw new Error('Permission not granted!')
+      }
+      const token = (await Notifications.getExpoPushTokenAsync()).data
+      return token
+    } catch (error) {
+      console.error(error)
     }
   }
+  const rough= async()=>{
+    // const apple= await Notifications.requestPermissionsAsync();
+    // // Notifications.requestPermissionsAsync().then((whatever)=>console.log('whatever!'))
+    // // console.log(await Notifications.re)
+    // console.log('hi noti',apple);
+    // const balls= await Notifications.getExpoPushTokenAsync()
+    // // console.log('ram')
 
-  useEffect(() => {
-    PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-    );
-    // StatusBar.setHidden(false);
-    // // StatusBar.setBackgroundColor('blue');
-    // StatusBar.setTranslucent(false);
-    // StatusBar.setTranslucent(true);
+    let balls = await Notifications.getExpoPushTokenAsync();
+    console.log('hi ram!')
+    // return balls
+  }
 
-    if (requestUserPermission()) {
-      messaging()
-        .getToken()
-        .then((token) => console.log(token));
-    } else {
-      console.log("Permission denied!");
-    }
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage.notification
-          );
-          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-        }
-        // setLoading(false);
-      });
-    // background notification
-    messaging().onNotificationOpenedApp( async(remoteMessage) => {
-      console.log(
-        "Notification caused app to open from background state:",
-        remoteMessage.notification
-      );
-      // navigation.navigate(remoteMessage.data.type);
-    });
-    // Register background handler
-    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      console.log("Message handled in the background!", remoteMessage);
-    });
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
 
-    return unsubscribe;
-  });
+  async function roughe(){
+    console.log('start!');
+    registerForPushNotificationsAsync()
+    let token=  await Notifications.getExpoPushTokenAsync();
+    console.log(token.data)
+    console.log('end!')
+  }
+
+  useEffect(()=>{
+    roughe()
+  },[])
   return (
     <NavigationContainer>
       <Tab.Navigator
