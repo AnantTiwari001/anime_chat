@@ -18,6 +18,13 @@ import FormScreen2 from "./components/FormScreen2";
 import FormScreen3 from "./components/FormScreen3";
 import FormScreen4 from "./components/FormScreen4";
 import ChatingPage from "./Pages/ChatsPage";
+import Setting from "./Pages/Setting";
+import NotificationPage from "./Pages/NotificationPage";
+import MindfulMoment from "./Pages/notification/MindfulMoment";
+import SetReminder from "./Pages/notification/SetReminder";
+import Recommendations from "./Pages/notification/Recommendations";
+import LanguagePage from "./Pages/LanguagePage";
+import TermPage from "./Pages/TermPage";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import * as Notifications from 'expo-notifications'
@@ -51,6 +58,22 @@ function ChatScreen() {
   );
 }
 
+const ProfileStack= createNativeStackNavigator();
+
+function ProfileScreen(){
+  return(
+    <ProfileStack.Navigator >
+      <ProfileStack.Screen name="Setting" component={Setting} />
+      <ProfileStack.Screen name="Notification" component={NotificationPage} />
+      <ProfileStack.Screen name="Mindful moment" component={MindfulMoment} />
+      <ProfileStack.Screen name="Set a reminder" component={SetReminder} />
+      <ProfileStack.Screen name="Recommendations" component={Recommendations} />
+      <ProfileStack.Screen name="Language" component={LanguagePage} />
+      <ProfileStack.Screen name="Terms And Conditions" component={TermPage} />
+    </ProfileStack.Navigator>
+  )
+}
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -70,18 +93,6 @@ export default function App() {
     } catch (error) {
       console.error(error)
     }
-  }
-  const rough= async()=>{
-    // const apple= await Notifications.requestPermissionsAsync();
-    // // Notifications.requestPermissionsAsync().then((whatever)=>console.log('whatever!'))
-    // // console.log(await Notifications.re)
-    // console.log('hi noti',apple);
-    // const balls= await Notifications.getExpoPushTokenAsync()
-    // // console.log('ram')
-
-    let balls = await Notifications.getExpoPushTokenAsync();
-    console.log('hi ram!')
-    // return balls
   }
 
 
@@ -130,7 +141,7 @@ export default function App() {
       >
         <Tab.Screen name="new" component={NewAnimeScreen} />
         <Tab.Screen name="Main" component={ChatScreen} />
-        <Tab.Screen name="profile" component={Feedback} />
+        <Tab.Screen name="profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
