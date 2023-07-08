@@ -8,6 +8,18 @@
         }
       ]
     ],
+    "notification":{
+      "icon":"./assets/icon.png",
+      "androidMode":"collapse",
+      "androidCollapsedTitle":"anime_chat"
+    },
+    "androidNavigationBar":{
+      "visible":"sticky-immersive"
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "hidden": true
+    },
     "name": "anime_chat",
     "slug": "anime_chat",
     "version": "1.0.0",
@@ -17,8 +29,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "permissions": ["NOTIFICATIONS"],
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -29,8 +40,7 @@
     "android": {
       "googleServicesFile":"./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.kali0charan.anime_chat"
     },

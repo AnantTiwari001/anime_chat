@@ -14,7 +14,7 @@ import { useState } from "react";
 import Header from "../components/Header";
 
 const items = [
-  { msg: "whatever man", time: "8:20 PM" },
+  { msg: "whatever man0", time: "8:20 PM" },
   { msg: "whatever man", time: "8:20 PM" },
   { msg: "whatever man", time: "8:20 PM" },
   { msg: "whatever man", time: "8:20 PM" },
@@ -24,6 +24,10 @@ const ChatPage = ({navigation}) => {
     const [text, setText]=useState('')
     const rough=()=>{
       console.log(navigation.getParam('profile'));
+    };
+    const handleInput=(newText)=>{
+      setText(newText);
+      console.log(newText);
     }
   return (
     <SafeAreaView style={styles.container}>
@@ -36,7 +40,7 @@ const ChatPage = ({navigation}) => {
         ))}
       </ScrollView>
       <View style={{paddingVertical:15}}>
-        <TypeMsg text={text} setFunction={(newText)=>setText(newText)} />
+        <TypeMsg text={text} setFunction={(newText)=>handleInput(newText)} />
       </View>
     </SafeAreaView>
   );

@@ -1,19 +1,19 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 // import { Ionicons } from '@expo/vector-icons';
 
-const Header=({navigation, profile})=>{
+const Header=({navigation, profile, absolute})=>{
       // <Ionicons name="ios-add-circle-outline" size={40} color="black" />
     const handleBack=()=>{
       console.log(navigation.goBack());
     //   console.log('back done lol!');
     }
     const rough=()=>{
-      console.log('logging rough!');
+      // console.log('logging rough!');
       // console.log(profile)
-      navigation.navigate('profile');
+      // navigation.navigate('profile');
     }
   return(
-    <View style={styles.container}>
+    <View style={[styles.container, absolute&&{position:'absolute', top:0, right:0, left:0}]}>
     <TouchableOpacity onPress={handleBack} >
       <Text style={styles.arrow}>←</Text> 
     </TouchableOpacity>
@@ -46,6 +46,10 @@ const styles= StyleSheet.create({
     justifyContent:'space-between',
     alignItems:'center',
     paddingHorizontal:15,
+    backgroundColor:'white',
+    zIndex:7,
+    // position:'absolute',
+    // top:0
     // borderWidth:1
   },
   arrow:{

@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-const TypeMsg = ({ text, setFunction, placeholderText, icon }) => {
+const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
   // const [text, setText] = useState('');
   return (
     <View style={styles.container}>
@@ -30,6 +30,7 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon }) => {
         placeholder={placeholderText}
         placeholderTextColor="rgba(0,0,0,0.5)"
         underlineColorAndroid="transparent"
+        onSubmitEditing={submitFunc}
       />
     </View>
   );
