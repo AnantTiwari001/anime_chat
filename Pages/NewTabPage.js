@@ -7,12 +7,15 @@ import {
   SafeAreaView,
   ImageBackground,
   ScrollView,
+  Modal,
 } from "react-native";
 
 import SearchBar from "../components/SearchBar";
 
 import { useRef, useEffect, useState } from "react";
 import { Dimensions } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import BuyCoinPage from "./BuyCoinPage";
 
 const spaceAround = 7;
 const width = "45%";
@@ -26,6 +29,7 @@ const verticalMargin =
 // console.log("The required vertical margin is", verticalMargin);
 
 const NewTabPage = () => {
+  const [isVisible, setIsVisible]= useState(false);
   const items = [
     {
       name: "anime1 hero1",
@@ -77,9 +81,16 @@ const NewTabPage = () => {
       users: "50",
     },
   ];
+  const handleCoinPress = () => {
+    console.log("pressed coin buy probably");
+    setIsVisible(true)
+  };
   return (
     <View style={{ flex: 1, backgroundColor: "#9090f0", paddingTop: 30 }}>
-      <View style={{ paddingHorizontal:15, marginBottom:7 }}>
+      <Modal animationType="slide" visible={isVisible} onRequestClose={()=>setIsVisible(false)} >
+        <BuyCoinPage closeFunc={()=> setIsVisible(false)} />
+      </Modal>
+      <View style={{ paddingHorizontal: 15, marginBottom: 7 }}>
         <SearchBar />
       </View>
       <View style={styles.headerContainer}>
@@ -103,11 +114,13 @@ const NewTabPage = () => {
             borderRadius: 15,
             backgroundColor: "gray",
           }}
+          onPress={handleCoinPress}
         >
-          <Image
+          {/* <Image
             source={{ uri: "https://picsum.photos/200/300" }}
             style={{ width: 20, aspectRatio: 1, borderRadius: 5 }}
-          />
+          /> */}
+          <FontAwesome5 name="coins" size={24} color="black" />
           <Text>2</Text>
         </TouchableOpacity>
       </View>
@@ -120,19 +133,17 @@ const NewTabPage = () => {
         </View> */}
           {items.map((item, index) =>
             index % 2 == 0 ? (
-              <View style={{ flexDirection: "row" }} key={index} >
+              <View style={{ flexDirection: "row" }} key={index}>
                 <Card item={item} />
                 {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {items[index + 1] ? (
                   <Card item={items[index + 1]} />
                 ) : (
-                  <Card item={items[0]} hidden={true}/>
+                  <Card item={items[0]} hidden={true} />
                 )}
               </View>
-            ) : (
-              null
-            )
+            ) : null
           )}
         </ScrollView>
       </View>
