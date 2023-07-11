@@ -7,34 +7,41 @@ import {
   TouchableHighlight,
   SafeAreaView,
   ScrollView,
+  Modal,
+  TouchableWithoutFeedback,
+  Touchable,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Message from "../components/Message";
 import TypeMsg from "../components/TypeMsg";
 import { useState } from "react";
 import Header from "../components/Header";
+import { AntDesign } from "@expo/vector-icons";
 
 const items = [
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM" },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
-  { msg: "whatever man", time: "8:20 PM", isRecieve:true },
+  { msg: "whatever man0", time: "8:20 PM", isRecieve: true, uid: "msg01" },
+  { msg: "whatever man1", time: "8:20 PM", uid: "msg02" },
+  { msg: "whatever man2", time: "8:20 PM", isRecieve: true, uid: "msg03" },
+  { msg: "whatever man3", time: "8:20 PM", isRecieve: true, uid: "msg04" },
+  { msg: "Jay shree Ram", time: "8:20 PM", isRecieve: true, uid: "msg05", isReply:'shree Ram' },
 ];
 
 const ChatingPage = ({ navigation }) => {
-  const [msgArray,setMsgArray]= useState(items);
+  const [msgArray, setMsgArray] = useState(items);
   const [text, setText] = useState("");
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [activeMsg, setActiveMsg] = useState(null);
+  const [replying, setReplying]= useState([false,'']);
   const route = useRoute();
   const rough = () => {
     console.log(route.params.profile);
     // console.log(navigation.getParam('profile'));
     // console.log('rough yeah!')
+  };
+  const handleLongPress = (index) => {
+    console.log("hello world");
+    setPopupVisible(true);
+    setActiveMsg(index);
   };
   const handleInput = (newText) => {
     setText(newText);
@@ -53,22 +60,79 @@ const ChatingPage = ({ navigation }) => {
           ":" +
           timeObj.getMinutes().toString() +
           "AM");
-    msgArray.push({ msg: text, time: time });
+    msgArray.push({ msg: text, time: time, isReply:replying[1] });
     setText("");
+    setReplying(false, '')
+
   };
+  const handleReact=(emoji)=>{
+    msgArray[activeMsg].emoji=emoji;
+    setPopupVisible(false)
+  }
+  const handleReply=()=>{
+    setReplying([true, msgArray[activeMsg].msg]);
+    setPopupVisible(false)
+  }
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View style={{position:"absolute", top:0}}> */}
-      <Header navigation={navigation} profile={route.params.profile} absolute={true} />
-      {/* </View> */}
+      {/* {popupVisible && <LongPressPop />} */}
+      <Modal
+        visible={popupVisible}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setPopupVisible(false)}
+      >
+          <View style={styles.popContainer}>
+            <View style={styles.popMain}>
+              <View style={styles.emoji}>
+                <TouchableOpacity onPress={()=>handleReact('like2')} >
+                  <AntDesign name="like2" size={32} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>handleReact('heart')} >
+                  <AntDesign name="heart" size={32} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>handleReact('smileo')} >
+                  <AntDesign name="smileo" size={32} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>handleReact('meh')} >
+                  <AntDesign name="meh" size={32} color="black" />
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={styles.reply} onPress={handleReply} >
+                <Text style={{ fontSize: 20 }}>Reply</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+      </Modal>
+      <Header
+        navigation={navigation}
+        profile={route.params.profile}
+        absolute={true}
+      />
       <ScrollView style={{ paddingTop: 30 }}>
         {msgArray.map((item, index) => (
-          <TouchableOpacity key={index} onPress={rough}>
-            <Message msgInfo={item} isRecieve={item.isRecieve} />
+          <TouchableOpacity
+            key={index}
+            onPress={rough}
+            onLongPress={() => handleLongPress(index)}
+          >
+            <Message msgInfo={item} isRecieve={item.isRecieve} emoji={item.emoji} isReply={item.isReply} /> 
           </TouchableOpacity>
         ))}
+        <View
+          style={{
+            borderWidth: 1,
+            width: 100,
+            height: 40,
+            borderColor: "rgba(0,0,0,0)",
+          }}
+        ></View>
       </ScrollView>
-      <View style={{ paddingVertical: 15 }}>
+      <View style={replying[0]&&{ marginVertical: 15, borderWidth:1, borderRadius:25}}>
+        {replying[0] && (<View style={styles.replyBlock} >
+          <Text style={{borderLeftWidth:1}} > {replying[1]} </Text>
+        </View>) }
+        
         <TypeMsg
           text={text}
           setFunction={(newText) => handleInput(newText)}
@@ -81,6 +145,32 @@ const ChatingPage = ({ navigation }) => {
   );
 };
 
+const LongPressPop = () => {
+  return (
+    <View style={styles.popContainer}>
+      <View style={styles.popMain}>
+        <View style={styles.emoji}>
+          <TouchableOpacity>
+            <AntDesign name="like2" size={32} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <AntDesign name="heart" size={32} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <AntDesign name="smileo" size={32} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <AntDesign name="meh" size={32} color="black" />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.reply}>
+          <Text style={{ fontSize: 20 }}>Reply</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -88,6 +178,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 20,
   },
+  popMain: {
+    flex: 1,
+    backgroundColor: "red",
+    // alignItems:'center',
+    marginHorizontal: 50,
+    paddingVertical: 30,
+    borderRadius: 20,
+  },
+  popContainer: {
+    flex: 1,
+    position: "absolute",
+    top: "30%",
+    left: 0,
+    right: 0,
+    zIndex: 18,
+  },
+  emoji: {
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "space-evenly",
+  },
+  reply: {
+    // borderWidth:1,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  replyBlock:{
+    // borderWidth:1,
+    paddingHorizontal:35,
+    paddingVertical:10
+  }
 });
 
 export default ChatingPage;
