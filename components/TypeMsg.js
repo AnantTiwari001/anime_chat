@@ -9,22 +9,17 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { CommonStyle, StyleValues } from "../assets/styles";
 
 const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
   // const [text, setText] = useState('');
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{ height:20, justifyContent:'center' }}>
+      <TouchableOpacity style={[ {height:StyleValues.size[0]}, CommonStyle.center]}>
         <FontAwesome5 name={icon} size={20} />
       </TouchableOpacity>
       <TextInput
-        style={{
-          flex: 1,
-          height: 25,
-          // borderLeftWidth:1,
-          fontSize: 17,
-          paddingLeft: 15,
-        }}
+        style={[CommonStyle.container,{height:StyleValues.size[0], fontSize:StyleValues.font[2],paddingLeft:StyleValues.paddingMargin[3]}]}
         onChangeText={(text) => setFunction(text)}
         value={text}
         placeholder={placeholderText}

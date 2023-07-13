@@ -1,23 +1,24 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import LogButton from "../components/LogButton";
+import { CommonStyle, StyleValues } from "../assets/styles";
 
 const BuyCoinPage = ({closeFunc}) => {
   return (
-    <View style={styles.container}>
+    <View style={[CommonStyle.container,{padding:StyleValues.paddingMargin[3]}]}>
       <TouchableOpacity onPress={closeFunc}>
-        <AntDesign name="close" size={20} color="white" />
+        <AntDesign name="close" size={20} color="black" />
       </TouchableOpacity>
       <View>
         <View style={styles.heading}>
-          <Text style={{ fontSize: 25, color: "white" }}>Buy More Coins</Text>
+          <Text style={{ fontSize: StyleValues.font[3], color: StyleValues.color.dark }}>Buy More Coins</Text>
           <View style={styles.coin}>
             <FontAwesome5 name="coins" size={24} color="gray" />
             <Text style={{ color: "white" }}>0</Text>
           </View>
         </View>
         <View   >
-          <View style={{ flexDirection: "row", marginBottom: 17 }}>
+          <View style={[{ flexDirection: "row", marginBottom: 17 }]}>
             <Card info={{ coins: "100 Coins", price: "£10.99" }} />
             <View style={{ width: 17 }}></View>
             <Card info={{ coins: "250 Coins", price: "£21.99" }} />
@@ -43,7 +44,7 @@ const Card = ({ info }) => {
         <FontAwesome5 name="coins" size={50} color="white" />
         {console.log(info.coins)}
       </View>
-      <TouchableOpacity style={styles.cardMain}>
+      <TouchableOpacity style={[CommonStyle.container, CommonStyle.sEven, {borderRadius:StyleValues.radius[2],paddingHorizontal:StyleValues.paddingMargin[1]}]}>
         <Text style={{ color: "white", fontSize: 20 }}>{info.coins}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={{ color: "white" }}>{info.price} </Text>

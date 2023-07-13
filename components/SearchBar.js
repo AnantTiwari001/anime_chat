@@ -10,6 +10,7 @@ import {
 import TypeMsg from "./TypeMsg";
 import LogButton from "../components/LogButton";
 import { useState } from "react";
+import { CommonStyle, StyleValues } from "../assets/styles";
 
 const SearchBar = () => {
   const [searchText, setSearchText] = useState(null);
@@ -44,7 +45,7 @@ const SearchBar = () => {
   ];
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.searchContainer}>
         <TypeMsg
           text={searchText}
@@ -53,9 +54,9 @@ const SearchBar = () => {
           icon={"search"}
         />
       </View>
-      <View style={{borderRadius:15, overflow:'hidden'}} >
+      <View style={{borderRadius:StyleValues.radius[3]}} >
         <ScrollView
-          style={styles.labels}
+          style={CommonStyle.horizontal}
           horizontal={true}
           overScrollMode="never"
         >
@@ -68,7 +69,7 @@ const SearchBar = () => {
                 ) : null
               )
             : trendingNrecent.map((item, index) => (
-                <View style={styles.labelItem} key={index}>
+                <View style={{marginHorizontal:StyleValues.paddingMargin[0]}} key={index}>
                   <LogButton text={item} dark={false} />
                 </View>
               ))}

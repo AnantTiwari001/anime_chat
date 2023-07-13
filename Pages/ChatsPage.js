@@ -17,26 +17,34 @@ import TypeMsg from "../components/TypeMsg";
 import { useState } from "react";
 import Header from "../components/Header";
 import { AntDesign } from "@expo/vector-icons";
+import { Configuration, OpenAIApi } from "openai";
+import 'url-polyfill';
+// import { config } from 'dotenv';
 
 const items = [
   { msg: "whatever man0", time: "8:20 PM", isRecieve: true, uid: "msg01" },
   { msg: "whatever man1", time: "8:20 PM", uid: "msg02" },
   { msg: "whatever man2", time: "8:20 PM", isRecieve: true, uid: "msg03" },
   { msg: "whatever man3", time: "8:20 PM", isRecieve: true, uid: "msg04" },
-  { msg: "Jay shree Ram", time: "8:20 PM", isRecieve: true, uid: "msg05", isReply:'shree Ram' },
+  {
+    msg: "Jay shree Ram",
+    time: "8:20 PM",
+    isRecieve: true,
+    uid: "msg05",
+    isReply: "shree Ram",
+  },
 ];
 
 const ChatingPage = ({ navigation }) => {
-  const [msgArray, setMsgArray] = useState(items);
+  const [msgArray, setMsgArray] = useState([]);
   const [text, setText] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeMsg, setActiveMsg] = useState(null);
-  const [replying, setReplying]= useState([false,'']);
+  const [replying, setReplying] = useState([false, ""]);
   const route = useRoute();
-  const rough = () => {
-    console.log(route.params.profile);
-    // console.log(navigation.getParam('profile'));
-    // console.log('rough yeah!')
+  const rough = async () => {
+    const call= await fetch('http://api.openweathermap.org/geo/1.0/direct?q=birgunj&appid=fc80203da81b326a508f73b26f9b742e')
+    console.log(await call.json())
   };
   const handleLongPress = (index) => {
     console.log("hello world");
@@ -60,19 +68,18 @@ const ChatingPage = ({ navigation }) => {
           ":" +
           timeObj.getMinutes().toString() +
           "AM");
-    msgArray.push({ msg: text, time: time, isReply:replying[1] });
+    msgArray.push({ msg: text, time: time, isReply: replying[1] });
     setText("");
-    setReplying(false, '')
-
+    setReplying(false, "");
   };
-  const handleReact=(emoji)=>{
-    msgArray[activeMsg].emoji=emoji;
-    setPopupVisible(false)
-  }
-  const handleReply=()=>{
+  const handleReact = (emoji) => {
+    msgArray[activeMsg].emoji = emoji;
+    setPopupVisible(false);
+  };
+  const handleReply = () => {
     setReplying([true, msgArray[activeMsg].msg]);
-    setPopupVisible(false)
-  }
+    setPopupVisible(false);
+  };
   return (
     <SafeAreaView style={styles.container}>
       {/* {popupVisible && <LongPressPop />} */}
@@ -82,27 +89,27 @@ const ChatingPage = ({ navigation }) => {
         transparent
         onRequestClose={() => setPopupVisible(false)}
       >
-          <View style={styles.popContainer}>
-            <View style={styles.popMain}>
-              <View style={styles.emoji}>
-                <TouchableOpacity onPress={()=>handleReact('like2')} >
-                  <AntDesign name="like2" size={32} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>handleReact('heart')} >
-                  <AntDesign name="heart" size={32} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>handleReact('smileo')} >
-                  <AntDesign name="smileo" size={32} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>handleReact('meh')} >
-                  <AntDesign name="meh" size={32} color="black" />
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity style={styles.reply} onPress={handleReply} >
-                <Text style={{ fontSize: 20 }}>Reply</Text>
+        <View style={styles.popContainer}>
+          <View style={styles.popMain}>
+            <View style={styles.emoji}>
+              <TouchableOpacity onPress={() => handleReact("like2")}>
+                <AntDesign name="like2" size={32} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleReact("heart")}>
+                <AntDesign name="heart" size={32} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleReact("smileo")}>
+                <AntDesign name="smileo" size={32} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleReact("meh")}>
+                <AntDesign name="meh" size={32} color="black" />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity style={styles.reply} onPress={handleReply}>
+              <Text style={{ fontSize: 20 }}>Reply</Text>
+            </TouchableOpacity>
           </View>
+        </View>
       </Modal>
       <Header
         navigation={navigation}
@@ -116,7 +123,12 @@ const ChatingPage = ({ navigation }) => {
             onPress={rough}
             onLongPress={() => handleLongPress(index)}
           >
-            <Message msgInfo={item} isRecieve={item.isRecieve} emoji={item.emoji} isReply={item.isReply} /> 
+            <Message
+              msgInfo={item}
+              isRecieve={item.isRecieve}
+              emoji={item.emoji}
+              isReply={item.isReply}
+            />
           </TouchableOpacity>
         ))}
         <View
@@ -128,11 +140,21 @@ const ChatingPage = ({ navigation }) => {
           }}
         ></View>
       </ScrollView>
-      <View style={replying[0]&&{ marginVertical: 15, borderWidth:1, borderRadius:25}}>
-        {replying[0] && (<View style={styles.replyBlock} >
-          <Text style={{borderLeftWidth:1}} > {replying[1]} </Text>
-        </View>) }
-        
+      <View
+        style={
+          replying[0] && {
+            marginVertical: 15,
+            borderWidth: 1,
+            borderRadius: 25,
+          }
+        }
+      >
+        {replying[0] && (
+          <View style={styles.replyBlock}>
+            <Text style={{ borderLeftWidth: 1 }}> {replying[1]} </Text>
+          </View>
+        )}
+
         <TypeMsg
           text={text}
           setFunction={(newText) => handleInput(newText)}
@@ -204,11 +226,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
   },
-  replyBlock:{
+  replyBlock: {
     // borderWidth:1,
-    paddingHorizontal:35,
-    paddingVertical:10
-  }
+    paddingHorizontal: 35,
+    paddingVertical: 10,
+  },
 });
 
 export default ChatingPage;

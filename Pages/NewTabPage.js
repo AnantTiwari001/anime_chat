@@ -17,19 +17,10 @@ import { Dimensions } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import BuyCoinPage from "./BuyCoinPage";
 
-const spaceAround = 7;
-const width = "45%";
-const screenWidth = Dimensions.get("window").width;
-// console.log('Screen Width:', screenWidth);
-
-const verticalMargin =
-  (screenWidth - 2 * (parseInt(width) / 100) * screenWidth) / 3 / 2;
-// const verticalMargin= (screenWidth - ((100-(parseInt(width)*2) )/100)* screenWidth)
-
-// console.log("The required vertical margin is", verticalMargin);
+import { CommonStyle, StyleValues } from "../assets/styles";
 
 const NewTabPage = () => {
-  const [isVisible, setIsVisible]= useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const items = [
     {
       name: "anime1 hero1",
@@ -83,60 +74,46 @@ const NewTabPage = () => {
   ];
   const handleCoinPress = () => {
     console.log("pressed coin buy probably");
-    setIsVisible(true)
+    setIsVisible(true);
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "#9090f0", paddingTop: 30 }}>
-      <Modal animationType="slide" visible={isVisible} onRequestClose={()=>setIsVisible(false)} >
-        <BuyCoinPage closeFunc={()=> setIsVisible(false)} />
+    <View
+      style={[CommonStyle.container, { padding: StyleValues.paddingMargin[2] }]}
+    >
+      <Modal
+        animationType="slide"
+        visible={isVisible}
+        onRequestClose={() => setIsVisible(false)}
+      >
+        <BuyCoinPage closeFunc={() => setIsVisible(false)} />
       </Modal>
-      <View style={{ paddingHorizontal: 15, marginBottom: 7 }}>
+      <View style={{}}>
         <SearchBar />
       </View>
-      <View style={styles.headerContainer}>
+      <View style={[CommonStyle.center, CommonStyle.horizontal, CommonStyle.sBtn, {paddingHorizontal:StyleValues.paddingMargin[3]}]}>
         <TouchableOpacity
-          style={{ flexDirection: "row", alignItems: "center" }}
+          style={[CommonStyle.component, CommonStyle.horizontal]}
         >
-          <Text style={{ fontSize: 20 }}>All </Text>
+          <Text style={{}}>All </Text>
           <Image
             source={{ uri: "https://picsum.photos/200/300" }}
-            style={{ width: 20, aspectRatio: 1, borderRadius: 5 }}
+            style={{ width: 20, aspectRatio: 1 }}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            // borderWidth: 1,
-            width: 70,
-            alignItems: "center",
-            height: 25,
-            justifyContent: "space-evenly",
-            flexDirection: "row",
-            borderRadius: 15,
-            backgroundColor: "gray",
-          }}
+          style={[CommonStyle.horizontal, CommonStyle.component]}
           onPress={handleCoinPress}
         >
-          {/* <Image
-            source={{ uri: "https://picsum.photos/200/300" }}
-            style={{ width: 20, aspectRatio: 1, borderRadius: 5 }}
-          /> */}
           <FontAwesome5 name="coins" size={24} color="black" />
           <Text>2</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.container, { borderColor: "red" }]}>
-        <ScrollView style={{ paddingHorizontal: spaceAround }}>
-          {/* <Card item={items[1]} hidden={true} /> */}
-          {/* <View style={{ borderColor:'red', flexDirection:'row'}}>
-          <Card item={items[2]} />
-          <Card item={items[3]} />
-        </View> */}
+      <View style={[CommonStyle.container]}>
+        <ScrollView style={{}}>
           {items.map((item, index) =>
             index % 2 == 0 ? (
-              <View style={{ flexDirection: "row" }} key={index}>
+              <View style={[CommonStyle.horizontal]} key={index}>
                 <Card item={item} />
-                {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
-                {/* {items[index+1]?(<Card item={items[index+1]} key={index+1}/>):(<Card item={item[0]} key={index+1} />)} */}
                 {items[index + 1] ? (
                   <Card item={items[index + 1]} />
                 ) : (
@@ -153,25 +130,35 @@ const NewTabPage = () => {
 
 const Card = ({ item, hidden }) => {
   return (
-    <View style={hidden ? styles.lastCardContainer : styles.cardContainer}>
+    <View
+      style={[
+        CommonStyle.container,
+        hidden && { opacity: 0 },
+        { aspectRatio: 0.66, margin: StyleValues.paddingMargin[2] },
+      ]}
+    >
       <ImageBackground
         source={{ uri: item.url }}
-        style={{ flex: 1, padding: 10 }}
-        borderRadius={20}
+        style={[CommonStyle.container,CommonStyle.sBtn,{padding:StyleValues.paddingMargin[3]}]}
+        borderRadius={StyleValues.radius[3]}
       >
-        <View style={styles.point}>
+        <View
+          style={[
+            CommonStyle.horizontal,
+            CommonStyle.component,
+            CommonStyle.selfStart,
+          ]}
+        >
           {/* Points badge */}
-          <Text style={{ marginRight: 3 }}>✦</Text>
+          <Text style={{}}>✦</Text>
           <Text>{item.points} </Text>
         </View>
-        <View style={styles.cardMain}>
+        <View style={[{}]}>
           <View>
-            <Text style={{ color: "white", fontSize: 18 }}>{item.name}</Text>
+            <Text style={{}}>{item.name}</Text>
           </View>
-          <Text style={{ color: "#ffffffb0", fontSize: 12, marginVertical: 2 }}>
-            {item.desc}
-          </Text>
-          <TouchableOpacity style={styles.cardBtn}>
+          <Text style={{}}>{item.desc}</Text>
+          <TouchableOpacity style={[CommonStyle.selfStart, CommonStyle.btn]}>
             <Text>Try Now →</Text>
           </TouchableOpacity>
         </View>
@@ -180,74 +167,57 @@ const Card = ({ item, hidden }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    paddingHorizontal: 0,
-    // justifyContent: "space-evenly",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
-    // borderWidth: 1,
-    // borderColor: "tomato",
-  },
-  cardContainer: {
-    backgroundColor: "tomato",
-    aspectRatio: 0.66,
-    alignSelf: "flex-start",
-    flex: 1,
-    marginHorizontal: spaceAround,
-    borderRadius: 20,
-    // width: width,
-    // borderWidth: 1,
-    marginVertical: verticalMargin,
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     flexDirection: "row",
+//     paddingHorizontal: 0,
+//     alignItems: "flex-start",
+//     flexWrap: "wrap",
+//   },
+//   cardContainer: {
+//     backgroundColor: "tomato", // container, component
+//     aspectRatio: 0.66,
+//     // alignSelf: "flex-start",
+//     flex: 1,
+//     borderRadius: 20,
+//     // width: width,
 
-    // borderWidth: 2,
-  },
-  lastCardContainer: {
-    backgroundColor: "tomato",
-    aspectRatio: 0.66,
-    alignSelf: "flex-start",
-    flex: 1,
-    marginHorizontal: spaceAround,
-    borderRadius: 20,
-    // width: width,
-    // borderWidth: 1,
-    marginVertical: verticalMargin,
-    opacity: 0,
-  },
-  point: {
-    backgroundColor: "#00000070",
-    flexDirection: "row",
-    alignSelf: "flex-start",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingBottom: 1,
-    paddingHorizontal: 9,
-    borderRadius: 10,
-  },
-  cardMain: {
-    flex: 1,
-    // borderWidth:1,
-    justifyContent: "flex-end",
-  },
-  cardBtn: {
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 20,
-    alignSelf: "flex-start",
-    justifyContent: "center",
-    paddingHorizontal: 15,
-    justifyContent: "center",
-    marginVertical: 4,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 40,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-});
+//     // borderWidth: 2,
+//   },
+//   point: {
+//     backgroundColor: "#00000070",
+//     flexDirection: "row",
+//     alignSelf: "flex-start",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     paddingBottom: 1,
+//     paddingHorizontal: 9,
+//     borderRadius: 10,
+//   },
+//   cardMain: {
+//     flex: 1,
+//     // borderWidth:1,
+//     justifyContent: "flex-end",
+//   },
+//   cardBtn: {
+//     backgroundColor: "white", // selfStart center
+//     padding: 10,
+//     borderRadius: 20,
+//     alignSelf: "flex-start",
+//     justifyContent: "center",
+//     paddingHorizontal: 15,
+//     justifyContent: "center",
+//     marginVertical: 4,
+//   },
+//   headerContainer: {
+//     flexDirection: "row", // center,   horizontal,
+//     justifyContent: "space-between",
+//     paddingHorizontal: 40,
+//     alignItems: "center",
+//     marginBottom: 10,
+//     flex: 0,
+//   },
+// });
 
 export default NewTabPage;

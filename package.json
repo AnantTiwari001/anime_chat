@@ -17,19 +17,22 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@react-navigation/stack": "^6.3.17",
+    "dotenv": "^16.3.1",
     "expo": "~48.0.18",
     "expo-constants": "~14.2.1",
     "expo-dev-client": "~2.2.1",
+    "expo-device": "~5.2.1",
     "expo-navigation-bar": "~2.1.1",
+    "expo-notifications": "~0.18.1",
     "expo-status-bar": "~1.4.4",
     "expo-updates": "~0.16.4",
+    "openai": "^3.3.0",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-push-notification": "^8.1.1",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
-    "expo-notifications": "~0.18.1",
-    "expo-device": "~5.2.1"
+    "url-polyfill": "^1.1.12"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
