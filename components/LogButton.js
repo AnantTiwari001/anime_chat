@@ -2,9 +2,9 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const LogButton=({text, dark})=>{
   return(
-    <TouchableOpacity style={[styles.container, dark?(styles.darkContainer):(null)]} >
+    <View style={[styles.container, dark?(styles.darkContainer):(null)]} >
       <Text style={[styles.text, dark?(styles.darkText):(null)]} >{text}</Text>
-    </TouchableOpacity>
+    </View>
   )
 }
 

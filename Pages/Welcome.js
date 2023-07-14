@@ -1,17 +1,17 @@
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import LogButton from '../components/LogButton';
 
 
-const Welcome = () => {
+const Welcome = ({navigation}) => {
     return (
       <View style={styles.container}>
         <View style={styles.btnGroup}>
-          <View  style={styles.btn} >
+          <TouchableOpacity  style={styles.btn} onPress={()=>{navigation.navigate('signIn')}} >
             <LogButton text={'Continue with Email'} dark={true} />
-          </View>
-          <View style={styles.btn} >
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} >
             <LogButton text={'Continue with Google'} dark={false} />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );

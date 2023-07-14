@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,21 +10,29 @@ import {
   Button,
 } from "react-native";
 import Header from "./Header";
+import PointContext from "../context/points/PointContext";
 
 const FormScreen2 = ({navigation}) => {
   const [checked, setChecked] = useState(25);
   let items = new Array(50).fill().map((_, i) => i);
   const handleNext=()=>{
-    navigation.navigate('fourth')
+    navigation.navigate('fourth');
+    sendData();
+  }
+  const Context= useContext(PointContext);
+  const sendData=()=>{
+    let data= Context.rough.value
+    console.log(data);
+    Context.rough.setFunc([...data, {third:checked}])   
   }
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <Header navigation={navigation} />
       <View style={{ position: "absolute", bottom: 10, alignSelf: "center" }}>
         <Button title="Next" onPress={handleNext} />
       </View>
       <View style={styles.main}>
-        <Text style={styles.textStyle}>How old is the AI bot...</Text>
+        <Text style={styles.textStyle} onPress={()=>{console.log(Context.rough.value)}} >How old is the AI bot...</Text>
       </View>
       <View style={{ overflow: "hidden", position: "relative", paddingHorizontal:30 }}>
         {/* <ImageBackground source={require('../assets/white.png')} blurRadius={6} style={{width:20,height:80, position:'absolute', zIndex:12}}/>

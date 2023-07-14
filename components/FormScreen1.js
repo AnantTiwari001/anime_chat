@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import Header from './Header';
+import PointContext from '../context/points/PointContext';
 
 const FormScreen1 = ({navigation}) => {
   const [checked, setChecked] = useState('first');
@@ -8,7 +9,17 @@ const FormScreen1 = ({navigation}) => {
   const handleNext=()=>{
     navigation.push('third');
     console.log('shall implement the navigation later');
+    sendData();
   }
+  const sendData=()=>{
+    let data= Context.rough.value
+    console.log(data);
+    Context.rough.setFunc([...data, {second:checked}])   
+  }
+  const rough=()=>{
+    console.log('rough1');
+  }
+  const Context= useContext(PointContext)
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
@@ -22,7 +33,7 @@ const FormScreen1 = ({navigation}) => {
         What sexuality has the AI bot... 
       </Text>
       <View style={styles.radioContainer} >
-        <TouchableOpacity onPress={()=>{setChecked('first')}} style={checked=='first'? styles.radioItemActive :styles.radioItem}>
+        <TouchableOpacity onPress={()=>{setChecked('first');rough()}} style={checked=='first'? styles.radioItemActive :styles.radioItem}>
           <Image source={require('../assets/female_probaly.png')} style={styles.image} />
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>{setChecked('second')}} style={checked=='second'? styles.radioItemActive :styles.radioItem}>

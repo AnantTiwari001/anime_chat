@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   Button,
 } from "react-native";
 import Header from "./Header";
+import PointContext from "../context/points/PointContext";
 
 const FormScreen3 = ({navigation}) => {
   const [checked, setChecked] = useState("first");
@@ -15,7 +16,14 @@ const FormScreen3 = ({navigation}) => {
   const handleNext = () => {
     console.log("shall implement the navigation later");
     navigation.navigate('fifth')
+    sendData();
   };
+  const Context= useContext(PointContext);
+  const sendData=()=>{
+    let data= Context.rough.value
+    console.log(data);
+    Context.rough.setFunc([...data, {forth:checked}])   
+  }
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />

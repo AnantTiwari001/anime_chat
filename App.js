@@ -22,9 +22,14 @@ import Recommendations from "./Pages/notification/Recommendations";
 import LanguagePage from "./Pages/LanguagePage";
 import TermPage from "./Pages/TermPage";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useContext, useEffect, useState, createContext } from "react";
 import * as Notifications from "expo-notifications";
 import PointState from "./context/points/PointState";
+import PointContext from "./context/points/PointContext";
+import Page0 from "./Pages/Page0";
+import SignInPage from "./Pages/SignInPage";
+import SignUpPage from "./Pages/SignUpPage";
+import Welcome from "./Pages/Welcome";
 
 const NewAnime = createNativeStackNavigator();
 
@@ -71,7 +76,22 @@ function ProfileScreen() {
   );
 }
 
+const SigningStack= createNativeStackNavigator();
+
+function SigningScreen(){
+  return(
+    <SigningStack.Navigator screenOptions={{headerShown:false}} >
+      <ProfileStack.Screen name="sHome" component={Page0} />
+      <ProfileStack.Screen name="sChoose" component={Welcome} />
+      <ProfileStack.Screen name="signIn" component={SignInPage} />
+      <ProfileStack.Screen name="signUp" component={SignUpPage} />
+    </SigningStack.Navigator>
+  )
+}
+
 const Tab = createBottomTabNavigator();
+
+const LogContext = createContext();
 
 export default function App() {
   const registerForPushNotificationsAsync = async () => {
@@ -101,6 +121,8 @@ export default function App() {
     console.log("end!");
   }
 
+  // const Context= useContext(PointContext);
+
   useEffect(() => {
     roughe();
     Notifications.setNotificationHandler({
@@ -111,36 +133,51 @@ export default function App() {
       }),
     });
   }, []);
+
+  
+  const [login, setLogin]= useState(false);
+
+  const handleSetLogin=()=>{
+    setLogin(!login);
+  }
+
   return (
-    <PointState>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
+    <LogContext.Provider  value={{Login:{value:login, setFunc:handleSetLogin}}} >
+      <PointState>
+        <NavigationContainer>
+          {login?(<Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-              if (route.name === "new") {
-                iconName = focused ? "fire" : "fire-alt";
-              } else if (route.name === "Main") {
-                iconName = focused ? "heartbeat" : "heart";
-              } else if (route.name === "profile") {
-                iconName = focused ? "grin" : "grin-alt";
-              }
+                if (route.name === "new") {
+                  iconName = focused ? "fire" : "fire-alt";
+                } else if (route.name === "Main") {
+                  iconName = focused ? "heartbeat" : "heart";
+                } else if (route.name === "profile") {
+                  iconName = focused ? "grin" : "grin-alt";
+                }
 
-              // You can return any component that you like here!
-              return <FontAwesome5 name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "tomato",
-            tabBarInactiveTintColor: "gray",
-            headerShown: false,
-            tabBarLabel: "",
-          })}
-        >
-          <Tab.Screen name="new" component={NewAnimeScreen} />
-          <Tab.Screen name="Main" component={ChatScreen} />
-          <Tab.Screen name="profile" component={ProfileScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </PointState>
+                // You can return any component that you like here!
+                return (
+                  <FontAwesome5 name={iconName} size={size} color={color} />
+                );
+              },
+              tabBarActiveTintColor: "tomato",
+              tabBarInactiveTintColor: "gray",
+              headerShown: false,
+              tabBarLabel: "",
+            })}
+          >
+            <Tab.Screen name="new" component={NewAnimeScreen} />
+            <Tab.Screen name="Main" component={ChatScreen} />
+            <Tab.Screen name="profile" component={ProfileScreen} />
+          </Tab.Navigator>):(<SigningScreen/>)}
+          
+        </NavigationContainer>
+      </PointState>
+    </LogContext.Provider>
   );
 }
+
+export {LogContext};

@@ -1,12 +1,19 @@
-import { Text, View, StyleSheet, Image } from 'react-native';
-import { useState } from 'react';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useContext, useState } from 'react';
 import LogButton from '../components/LogButton';
 import Inputform from '../components/InputForm';
+import { LogContext } from '../App';
 
 const SignInPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-  
+
+    const logValue= useContext(LogContext);
+
+    const handleLogin=()=>{
+      console.log(logValue.Login.setFunc());
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.textContainer} >
@@ -29,9 +36,9 @@ const SignInPage = () => {
           />
           <Text style={styles.forgot}>Forgot Password?</Text>
         </View>
-        <View style={styles.button} >
+        <TouchableOpacity style={styles.button} onPress={handleLogin} >
           <LogButton text={'Sign in'} dark={true} />
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };

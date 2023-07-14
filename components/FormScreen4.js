@@ -1,13 +1,28 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, Button } from "react-native";
 import Slider from "@react-native-community/slider";
-import { useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import Header from "./Header";
+import PointContext from "../context/points/PointContext";
 
 const FormScreen4 = ({ navigation }) => {
   const [value, setValue] = useState(100);
   const moveXText = value > 0 ? ((value - 50) / 100) * 220 : 0;
+  const Context= useContext(PointContext);
+  const sendData=()=>{
+    let data= Context.rough.value
+    console.log(data);
+    Context.rough.setFunc([...data, {fifth:value}])
+  }
+  const handleNext=()=>{
+    sendData();
+    // navigation.navigate('home')
+    console.log(Context.rough.value)
+  }
   return (
     <View style={styles.container}>
+      <View style={{ position: "absolute", bottom: 10, alignSelf: "center" }}>
+        <Button title="Next" onPress={handleNext} />
+      </View>
       <View style={{position:'absolute', top:20, right:0, left:0, height:50}} >
         <Header navigation={navigation} />
       </View>
