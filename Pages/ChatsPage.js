@@ -10,15 +10,18 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Touchable,
+  Alert,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Message from "../components/Message";
 import TypeMsg from "../components/TypeMsg";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "../components/Header";
 import { AntDesign } from "@expo/vector-icons";
 import { Configuration, OpenAIApi } from "openai";
-import 'url-polyfill';
+import "url-polyfill";
+import PointContext from "../context/points/PointContext";
+import codegenNativeCommands from "react-native/Libraries/Utilities/codegenNativeCommands";
 // import { config } from 'dotenv';
 
 const items = [
@@ -36,6 +39,7 @@ const items = [
 ];
 
 const ChatingPage = ({ navigation }) => {
+  const Context = useContext(PointContext);
   const [msgArray, setMsgArray] = useState([]);
   const [text, setText] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
@@ -43,8 +47,11 @@ const ChatingPage = ({ navigation }) => {
   const [replying, setReplying] = useState([false, ""]);
   const route = useRoute();
   const rough = async () => {
-    const call= await fetch('http://api.openweathermap.org/geo/1.0/direct?q=birgunj&appid=fc80203da81b326a508f73b26f9b742e')
-    console.log(await call.json())
+    const call = await fetch(
+      "http://api.openweathermap.org/geo/1.0/direct?q=birgunj&appid=fc80203da81b326a508f73b26f9b742e"
+    );
+    // console.log(await call.json())
+    console.log(Context.point.value);
   };
   const handleLongPress = (index) => {
     console.log("hello world");
@@ -55,22 +62,28 @@ const ChatingPage = ({ navigation }) => {
     setText(newText);
   };
   const handleSubmit = () => {
-    const timeObj = new Date();
-    let time = "";
-    timeObj.getHours() > 12
-      ? (time =
-          (timeObj.getHours() - 12).toString() +
-          ":" +
-          timeObj.getMinutes().toString() +
-          " PM")
-      : (time =
-          timeObj.getHours().toString() +
-          ":" +
-          timeObj.getMinutes().toString() +
-          "AM");
-    msgArray.push({ msg: text, time: time, isReply: replying[1] });
-    setText("");
-    setReplying(false, "");
+    if (Context.point.value > 0) {
+      console.log('starting!', Context.point.value)
+      const timeObj = new Date();
+      let time = "";
+      timeObj.getHours() > 12
+        ? (time =
+            (timeObj.getHours() - 12).toString() +
+            ":" +
+            timeObj.getMinutes().toString() +
+            " PM")
+        : (time =
+            timeObj.getHours().toString() +
+            ":" +
+            timeObj.getMinutes().toString() +
+            "AM");
+      msgArray.push({ msg: text, time: time, isReply: replying[1] });
+      setText("");
+      setReplying(false, "");
+      Context.point.setFunc(Context.point.value-1);
+    }else(
+      Alert.alert('not enough credits! consider buying more!')
+    )
   };
   const handleReact = (emoji) => {
     msgArray[activeMsg].emoji = emoji;

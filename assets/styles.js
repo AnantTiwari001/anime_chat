@@ -37,7 +37,7 @@ const CommonStyle = StyleSheet.create({
 const StyleValues = {
     paddingMargin: [3, 7, 8, 15, 23, 32],
     size: [25, 40, 53, 62, 73, 91, 110, 270],
-    color: { light: "white", dark: "black", bright: "red", cool: "tomato" },
+    color: { light: "white", dark: "#b9bdbd", bright: "red", cool: "tomato", blue:'purple' },
     radius:[5,7,10,13,17,20,25,27,32],
     font:[7,12,17,25]
 };

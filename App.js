@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-} from "react-native";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
 import Rough from "./components/Rough";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -28,7 +23,8 @@ import LanguagePage from "./Pages/LanguagePage";
 import TermPage from "./Pages/TermPage";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect } from "react";
-import * as Notifications from 'expo-notifications'
+import * as Notifications from "expo-notifications";
+import PointState from "./context/points/PointState";
 
 const NewAnime = createNativeStackNavigator();
 
@@ -59,11 +55,11 @@ function ChatScreen() {
   );
 }
 
-const ProfileStack= createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 
-function ProfileScreen(){
-  return(
-    <ProfileStack.Navigator >
+function ProfileScreen() {
+  return (
+    <ProfileStack.Navigator>
       <ProfileStack.Screen name="Setting" component={Setting} />
       <ProfileStack.Screen name="Notification" component={NotificationPage} />
       <ProfileStack.Screen name="Mindful moment" component={MindfulMoment} />
@@ -72,7 +68,7 @@ function ProfileScreen(){
       <ProfileStack.Screen name="Language" component={LanguagePage} />
       <ProfileStack.Screen name="Terms And Conditions" component={TermPage} />
     </ProfileStack.Navigator>
-  )
+  );
 }
 
 const Tab = createBottomTabNavigator();
@@ -80,32 +76,32 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const registerForPushNotificationsAsync = async () => {
     try {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync()
-      let finalStatus = existingStatus
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync()
-        finalStatus = status
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
       }
-      if (finalStatus !== 'granted') {
-        throw new Error('Permission not granted!')
+      if (finalStatus !== "granted") {
+        throw new Error("Permission not granted!");
       }
-      const token = (await Notifications.getExpoPushTokenAsync()).data
-      return token
+      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      return token;
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
+  };
+
+  async function roughe() {
+    console.log("start!");
+    registerForPushNotificationsAsync();
+    let token = await Notifications.getExpoPushTokenAsync();
+    console.log(token.data);
+    console.log("end!");
   }
 
-
-  async function roughe(){
-    console.log('start!');
-    registerForPushNotificationsAsync()
-    let token=  await Notifications.getExpoPushTokenAsync();
-    console.log(token.data)
-    console.log('end!')
-  }
-
-  useEffect(()=>{
+  useEffect(() => {
     roughe();
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
@@ -114,36 +110,37 @@ export default function App() {
         shouldSetBadge: false,
       }),
     });
-    
-  },[])
+  }, []);
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    <PointState>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === "new") {
-              iconName = focused ? "fire" : "fire-alt";
-            } else if (route.name === "Main") {
-              iconName = focused ? "heartbeat" : "heart";
-            } else if (route.name === "profile") {
-              iconName = focused ? "grin" : "grin-alt";
-            }
+              if (route.name === "new") {
+                iconName = focused ? "fire" : "fire-alt";
+              } else if (route.name === "Main") {
+                iconName = focused ? "heartbeat" : "heart";
+              } else if (route.name === "profile") {
+                iconName = focused ? "grin" : "grin-alt";
+              }
 
-            // You can return any component that you like here!
-            return <FontAwesome5 name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
-          headerShown: false,
-          tabBarLabel: "",
-        })}
-      >
-        <Tab.Screen name="new" component={NewAnimeScreen} />
-        <Tab.Screen name="Main" component={ChatScreen} />
-        <Tab.Screen name="profile" component={ProfileScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+              // You can return any component that you like here!
+              return <FontAwesome5 name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: "tomato",
+            tabBarInactiveTintColor: "gray",
+            headerShown: false,
+            tabBarLabel: "",
+          })}
+        >
+          <Tab.Screen name="new" component={NewAnimeScreen} />
+          <Tab.Screen name="Main" component={ChatScreen} />
+          <Tab.Screen name="profile" component={ProfileScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </PointState>
   );
 }

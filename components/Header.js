@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button, Dimensions } from 'react-native';
 // import { Ionicons } from '@expo/vector-icons';
 
 const Header=({navigation, profile, absolute})=>{
@@ -13,7 +13,7 @@ const Header=({navigation, profile, absolute})=>{
       // navigation.navigate('profile');
     }
   return(
-    <View style={[styles.container, absolute&&{position:'absolute', top:0, right:0, left:0}]}>
+    <View style={[styles.container, absolute&&{position:'absolute', top:0, width:Dimensions.get('window').width }]}>
     <TouchableOpacity onPress={handleBack} >
       <Text style={styles.arrow}>←</Text> 
     </TouchableOpacity>
@@ -41,7 +41,7 @@ const styles= StyleSheet.create({
   container:{
     maxHeight:60,
     flexDirection:'row',
-    width:'100%',
+    // width:'100%',
     flex:1,
     justifyContent:'space-between',
     alignItems:'center',

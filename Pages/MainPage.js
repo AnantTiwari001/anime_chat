@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Contact from "../components/Contact";
+import { CommonStyle, StyleValues } from "../assets/styles";
 
 const items = [
   {
@@ -47,7 +48,7 @@ const MainPage = ({navigation}) => {
     // navigation.navigate('chatScreen')
   }
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, CommonStyle.container, ]}>
       <ScrollView style={styles.scrollcontainer}>
         {items.map((item, index) => (
           <TouchableOpacity key={index} onPress={contactHandle} >
@@ -64,9 +65,8 @@ const MainPage = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#b9bdbd",
-    borderWidth: 1,
+    backgroundColor: StyleValues.color.dark,
+    // borderWidth: 1,
     paddingTop: 150,
   },
   scrollcontainer: {

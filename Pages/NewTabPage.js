@@ -9,15 +9,17 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
+import PointContext from "../context/points/PointContext";
 
 import SearchBar from "../components/SearchBar";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import { Dimensions } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import BuyCoinPage from "./BuyCoinPage";
 
 import { CommonStyle, StyleValues } from "../assets/styles";
+
 
 const NewTabPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -76,6 +78,7 @@ const NewTabPage = () => {
     console.log("pressed coin buy probably");
     setIsVisible(true);
   };
+  const Context= useContext(PointContext);
   return (
     <View
       style={[CommonStyle.container, { padding: StyleValues.paddingMargin[2] }]}
@@ -105,7 +108,7 @@ const NewTabPage = () => {
           onPress={handleCoinPress}
         >
           <FontAwesome5 name="coins" size={24} color="black" />
-          <Text>2</Text>
+          <Text>{Context.point.value}</Text>
         </TouchableOpacity>
       </View>
       <View style={[CommonStyle.container]}>

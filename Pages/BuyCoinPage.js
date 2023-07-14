@@ -29,8 +29,8 @@ const BuyCoinPage = ({closeFunc}) => {
             <Card info={{ coins: "1000 Coins", price: "£79.99" }} />
           </View>
         </View>
-        <TouchableOpacity style={{alignSelf:'center', marginVertical:20, backgroundColor:'#520b6e', paddingVertical:18, paddingHorizontal:25, borderRadius:15 }} >
-            <Text style={{color:'white', fontSize:17}} >Upgrade to Vip and get free coins →</Text>
+        <TouchableOpacity style={[{marginVertical:StyleValues.paddingMargin[4], backgroundColor:StyleValues.color.dark, paddingVertical:18, paddingHorizontal:25, borderRadius:15 },CommonStyle.center]} >
+            <Text style={{color:StyleValues.color.light, fontSize:StyleValues.font[2]}} >Upgrade to Vip and get free coins →</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -40,14 +40,14 @@ const BuyCoinPage = ({closeFunc}) => {
 const Card = ({ info }) => {
   return (
     <View style={styles.cardContainer}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={[ CommonStyle.container, CommonStyle.center]}>
         <FontAwesome5 name="coins" size={50} color="white" />
-        {console.log(info.coins)}
+        {/* {console.log(info.coins)} */}
       </View>
       <TouchableOpacity style={[CommonStyle.container, CommonStyle.sEven, {borderRadius:StyleValues.radius[2],paddingHorizontal:StyleValues.paddingMargin[1]}]}>
-        <Text style={{ color: "white", fontSize: 20 }}>{info.coins}</Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ color: "white" }}>{info.price} </Text>
+        <Text style={{ color: StyleValues.color.light, fontSize: StyleValues.font[2] }}>{info.coins}</Text>
+        <View style={[CommonStyle.horizontal, CommonStyle.sBtn]}>
+          <Text style={{ color: StyleValues.color.light }}>{info.price} </Text>
           <AntDesign name="arrowright" size={24} color="white" />
         </View>
       </TouchableOpacity>
