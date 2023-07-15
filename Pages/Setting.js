@@ -6,6 +6,9 @@ import {
   ScrollView,
   Button,
 } from "react-native";
+import { LogContext } from "../App";
+import { useContext } from "react";
+
 
 const Setting = ({ navigation }) => {
   const items = [
@@ -18,6 +21,14 @@ const Setting = ({ navigation }) => {
   const handleClick = (page) => {
     page && navigation.navigate(page);
   };
+
+  const logValue= useContext(LogContext);
+
+  const handleLogOut=()=>{
+    console.log('hii bruh')
+    logValue.Login.setFunc();
+  }
+
   return (
     <ScrollView style={styles.container}>
       {items.map((item, index) => (
@@ -35,9 +46,9 @@ const Setting = ({ navigation }) => {
         <Text style={[styles.grey, { marginVertical: 15, fontSize: 16 }]}>
           Version 4.157.1(310800)
         </Text>
-        <View style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleLogOut} >
           <Button title="Log Out" color={"blue"} />
-        </View>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

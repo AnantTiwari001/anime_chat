@@ -126,9 +126,10 @@ const ChatingPage = ({ navigation }) => {
       </Modal>
       <Header
         navigation={navigation}
-        profile={route.params.profile}
+        profile={route.params}
         absolute={true}
       />
+      {/* {console.log('hello world',route.params)} */}
       <ScrollView style={{ paddingTop: 30 }}>
         {msgArray.map((item, index) => (
           <TouchableOpacity

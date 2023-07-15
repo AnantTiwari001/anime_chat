@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 
-const Profile=()=>{
+const Profile=({name})=>{
     return(
         <View style={styles.container}>
 
@@ -10,7 +10,7 @@ const Profile=()=>{
           fontSize: 25,
           alignSelf: 'center',
         }}>
-        Layla Rose
+        {name}
       </Text>
       <Text
         style={{

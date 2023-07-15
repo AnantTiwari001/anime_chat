@@ -10,7 +10,7 @@ const Header=({navigation, profile, absolute})=>{
     const rough=()=>{
       // console.log('logging rough!');
       // console.log(profile)
-      // navigation.navigate('profile');
+      navigation.navigate('profile', profile);// profile parameter to be passed to profile page
     }
   return(
     <View style={[styles.container, absolute&&{position:'absolute', top:0, width:Dimensions.get('window').width }]}>

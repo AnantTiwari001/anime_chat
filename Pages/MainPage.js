@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import Contact from "../components/Contact";
 import { CommonStyle, StyleValues } from "../assets/styles";
+import { useContext, useState } from "react";
+import { LogContext } from "../App";
 
 const items = [
   {
@@ -37,21 +39,30 @@ const items = [
 ];
 
 const MainPage = ({navigation}) => {
+  const logValue= useContext(LogContext);
+  
   const handleNew=()=>{
-    navigation.navigate('first')
+    // navigation.navigate('first')
+    console.log('new chat!');
+    logValue.ContactList.setFunc([...logValue.ContactList.value, {
+      name: `Sophie Road${Math.random()*100}`,
+      lastMsg: "Why does this always happen...",
+      time: "wed 4:01 PM",
+      url: "https://picsum.photos/200/300",
+    }]);
   }
-  const contactHandle=()=>{
-    // navigation.navigate('chat', {profile:{url:'https://picsum.photos/200/300', name:'Layla Rose', status:'Online'},pagei:'MainIs'});
-    // console.log(navigation.navigate('chat'));
-    navigation.navigate('chatingScreen', {profile:{url:'https://picsum.photos/200/300', name:'Layla Rose', status:'Online'}, pagei:'whatever'});
-    // navigation.setParams('hello world')
-    // navigation.navigate('chatScreen')
+
+
+
+  const contactHandle=(index)=>{
+    navigation.navigate('chatingScreen', logValue.ContactList.value[index]);
+    console.log(logValue.ContactList.value[index])
   }
   return (
     <View style={[styles.container, CommonStyle.container, ]}>
       <ScrollView style={styles.scrollcontainer}>
-        {items.map((item, index) => (
-          <TouchableOpacity key={index} onPress={contactHandle} >
+        {logValue.ContactList.value.map((item, index) => (
+          <TouchableOpacity key={index} onPress={()=>contactHandle(index)} >
             <Contact contactInfo={item} />
           </TouchableOpacity>
         ))}

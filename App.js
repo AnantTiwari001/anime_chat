@@ -135,14 +135,19 @@ export default function App() {
   }, []);
 
   
-  const [login, setLogin]= useState(false);
+  const [login, setLogin]= useState(true);
+  const [contactList, setContactList]= useState([]);
+
+  const handleSetContactList=(newValue)=>{
+    setContactList(newValue);
+  }
 
   const handleSetLogin=()=>{
     setLogin(!login);
   }
 
   return (
-    <LogContext.Provider  value={{Login:{value:login, setFunc:handleSetLogin}}} >
+    <LogContext.Provider  value={{Login:{value:login, setFunc:handleSetLogin}, ContactList:{value:contactList, setFunc:handleSetContactList}}} >
       <PointState>
         <NavigationContainer>
           {login?(<Tab.Navigator
