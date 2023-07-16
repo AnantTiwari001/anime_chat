@@ -27,7 +27,7 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
         placeholder={placeholderText}
         placeholderTextColor="rgba(0,0,0,0.5)"
         underlineColorAndroid="transparent"
-        onSubmitEditing={submitFunc}
+        onSubmitEditing={ (text!='') && submitFunc}
         onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!')}}
         blurOnSubmit={false}
         onBlur={()=>{console.log('focus out!'); logValue.header.setFunc('blank')}}
