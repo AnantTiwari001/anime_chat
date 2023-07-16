@@ -6,10 +6,12 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import React from "react";
 import Contact from "../components/Contact";
 import { CommonStyle, StyleValues } from "../assets/styles";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LogContext } from "../App";
+import { useFocusEffect } from "@react-navigation/native";
 
 const items = [
   {
@@ -58,6 +60,13 @@ const MainPage = ({navigation}) => {
     navigation.navigate('chatingScreen', logValue.ContactList.value[index]);
     console.log(logValue.ContactList.value[index])
   }
+  useFocusEffect(
+    React.useCallback(() => {
+      // Your event listener code here
+      console.log('Main Page!!', logValue.header.value);
+      logValue.header.setFunc('default')
+    }, [])
+  );
   return (
     <View style={[styles.container, CommonStyle.container, ]}>
       <ScrollView style={styles.scrollcontainer}>

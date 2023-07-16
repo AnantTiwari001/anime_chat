@@ -2,19 +2,19 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import LogButton from "../components/LogButton";
 import { CommonStyle, StyleValues } from "../assets/styles";
+import PointContext from "../context/points/PointContext";
+import { useContext } from "react";
 
-const BuyCoinPage = ({closeFunc}) => {
+const BuyCoinPage = () => {
+  const Point= useContext(PointContext);
   return (
     <View style={[CommonStyle.container,{padding:StyleValues.paddingMargin[3]}]}>
-      <TouchableOpacity onPress={closeFunc}>
-        <AntDesign name="close" size={20} color="black" />
-      </TouchableOpacity>
       <View>
         <View style={styles.heading}>
           <Text style={{ fontSize: StyleValues.font[3], color: StyleValues.color.dark }}>Buy More Coins</Text>
           <View style={styles.coin}>
             <FontAwesome5 name="coins" size={24} color="gray" />
-            <Text style={{ color: "white" }}>0</Text>
+            <Text style={{ color: "white" }}>{Point.point.value}</Text>
           </View>
         </View>
         <View   >
@@ -29,7 +29,7 @@ const BuyCoinPage = ({closeFunc}) => {
             <Card info={{ coins: "1000 Coins", price: "£79.99" }} />
           </View>
         </View>
-        <TouchableOpacity style={[{marginVertical:StyleValues.paddingMargin[4], backgroundColor:StyleValues.color.dark, paddingVertical:18, paddingHorizontal:25, borderRadius:15 },CommonStyle.center]} >
+        <TouchableOpacity onPress={()=>console.log(Point)} style={[{marginVertical:StyleValues.paddingMargin[4], backgroundColor:StyleValues.color.dark, paddingVertical:18, paddingHorizontal:25, borderRadius:15 },CommonStyle.center]} >
             <Text style={{color:StyleValues.color.light, fontSize:StyleValues.font[2]}} >Upgrade to Vip and get free coins →</Text>
         </TouchableOpacity>
       </View>

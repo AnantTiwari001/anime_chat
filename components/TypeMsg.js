@@ -7,14 +7,16 @@ import {
   TouchableHighlight,
   TextInput,
 } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { CommonStyle, StyleValues } from "../assets/styles";
+import { LogContext } from "../App";
 
 const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
+  const logValue= useContext(LogContext);
   // const [text, setText] = useState('');
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, logValue=='hidden' && {transform:[{translateY:-20}], backgroundColor:'red'} ]}>
       <TouchableOpacity style={[ {height:StyleValues.size[0]}, CommonStyle.center]}>
         <FontAwesome5 name={icon} size={20} />
       </TouchableOpacity>
@@ -26,6 +28,7 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
         placeholderTextColor="rgba(0,0,0,0.5)"
         underlineColorAndroid="transparent"
         onSubmitEditing={submitFunc}
+        onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!')}}
       />
     </View>
   );
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 25,
     backgroundColor: "#ecf0f1",
+    marginBottom:10
   },
 });
 

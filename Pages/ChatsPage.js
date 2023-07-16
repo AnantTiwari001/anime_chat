@@ -11,17 +11,19 @@ import {
   TouchableWithoutFeedback,
   Touchable,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Message from "../components/Message";
 import TypeMsg from "../components/TypeMsg";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import { AntDesign } from "@expo/vector-icons";
 import { Configuration, OpenAIApi } from "openai";
 import "url-polyfill";
 import PointContext from "../context/points/PointContext";
 import codegenNativeCommands from "react-native/Libraries/Utilities/codegenNativeCommands";
+import { LogContext } from "../App";
 // import { config } from 'dotenv';
 
 const items = [
@@ -40,6 +42,7 @@ const items = [
 
 const ChatingPage = ({ navigation }) => {
   const Context = useContext(PointContext);
+  const logValue = useContext(LogContext);
   const [msgArray, setMsgArray] = useState([]);
   const [text, setText] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
@@ -63,7 +66,7 @@ const ChatingPage = ({ navigation }) => {
   };
   const handleSubmit = () => {
     if (Context.point.value > 0) {
-      console.log('starting!', Context.point.value)
+      console.log("starting!", Context.point.value);
       const timeObj = new Date();
       let time = "";
       timeObj.getHours() > 12
@@ -80,10 +83,8 @@ const ChatingPage = ({ navigation }) => {
       msgArray.push({ msg: text, time: time, isReply: replying[1] });
       setText("");
       setReplying(false, "");
-      Context.point.setFunc(Context.point.value-1);
-    }else(
-      Alert.alert('not enough credits! consider buying more!')
-    )
+      Context.point.setFunc(Context.point.value - 1);
+    } else Alert.alert("not enough credits! consider buying more!");
   };
   const handleReact = (emoji) => {
     msgArray[activeMsg].emoji = emoji;
@@ -93,6 +94,9 @@ const ChatingPage = ({ navigation }) => {
     setReplying([true, msgArray[activeMsg].msg]);
     setPopupVisible(false);
   };
+  useEffect(() => {
+    logValue.header.setFunc('blank');
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       {/* {popupVisible && <LongPressPop />} */}
@@ -124,11 +128,7 @@ const ChatingPage = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <Header
-        navigation={navigation}
-        profile={route.params}
-        absolute={true}
-      />
+      <Header navigation={navigation} profile={route.params} absolute={true} />
       {/* {console.log('hello world',route.params)} */}
       <ScrollView style={{ paddingTop: 30 }}>
         {msgArray.map((item, index) => (
@@ -168,14 +168,13 @@ const ChatingPage = ({ navigation }) => {
             <Text style={{ borderLeftWidth: 1 }}> {replying[1]} </Text>
           </View>
         )}
-
-        <TypeMsg
-          text={text}
-          setFunction={(newText) => handleInput(newText)}
-          placeholderText={"message"}
-          icon={"images"}
-          submitFunc={handleSubmit}
-        />
+          <TypeMsg
+            text={text}
+            setFunction={(newText) => handleInput(newText)}
+            placeholderText={"message"}
+            icon={"images"}
+            submitFunc={handleSubmit}
+          />
       </View>
     </SafeAreaView>
   );

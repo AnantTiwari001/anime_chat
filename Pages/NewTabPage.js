@@ -224,3 +224,4 @@ const Card = ({ item, hidden }) => {
 // });
 
 export default NewTabPage;
+export {BuyCoinPage};

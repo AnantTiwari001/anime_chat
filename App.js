@@ -76,17 +76,17 @@ function ProfileScreen() {
   );
 }
 
-const SigningStack= createNativeStackNavigator();
+const SigningStack = createNativeStackNavigator();
 
-function SigningScreen(){
-  return(
-    <SigningStack.Navigator screenOptions={{headerShown:false}} >
+function SigningScreen() {
+  return (
+    <SigningStack.Navigator screenOptions={{ headerShown: false }}>
       <ProfileStack.Screen name="sHome" component={Page0} />
       <ProfileStack.Screen name="sChoose" component={Welcome} />
       <ProfileStack.Screen name="signIn" component={SignInPage} />
       <ProfileStack.Screen name="signUp" component={SignUpPage} />
     </SigningStack.Navigator>
-  )
+  );
 }
 
 const Tab = createBottomTabNavigator();
@@ -134,55 +134,69 @@ export default function App() {
     });
   }, []);
 
-  
-  const [login, setLogin]= useState(true);
-  const [contactList, setContactList]= useState([]);
+  const [login, setLogin] = useState(true);
+  const [contactList, setContactList] = useState([]);
+  const[header, setHeader]= useState('default') //blank and hidden
 
-  const handleSetContactList=(newValue)=>{
+  const handleSetHeader=(newState)=>{
+    setHeader(newState)
+  }
+
+  const handleSetContactList = (newValue) => {
     setContactList(newValue);
-  }
+  };
 
-  const handleSetLogin=()=>{
+  const handleSetLogin = () => {
     setLogin(!login);
-  }
+  };
 
   return (
-    <LogContext.Provider  value={{Login:{value:login, setFunc:handleSetLogin}, ContactList:{value:contactList, setFunc:handleSetContactList}}} >
+    <LogContext.Provider
+      value={{
+        Login: { value: login, setFunc: handleSetLogin },
+        ContactList: { value: contactList, setFunc: handleSetContactList },
+        header:{value:header, setFunc:handleSetHeader}
+      }}
+    >
       <PointState>
         <NavigationContainer>
-          {login?(<Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
+          {login ? (
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
 
-                if (route.name === "new") {
-                  iconName = focused ? "fire" : "fire-alt";
-                } else if (route.name === "Main") {
-                  iconName = focused ? "heartbeat" : "heart";
-                } else if (route.name === "profile") {
-                  iconName = focused ? "grin" : "grin-alt";
-                }
+                  if (route.name === "new") {
+                    iconName = focused ? "fire" : "fire-alt";
+                  } else if (route.name === "Main") {
+                    iconName = focused ? "heartbeat" : "heart";
+                  } else if (route.name === "profile") {
+                    iconName = focused ? "grin" : "grin-alt";
+                  }
 
-                // You can return any component that you like here!
-                return (
-                  <FontAwesome5 name={iconName} size={size} color={color} />
-                );
-              },
-              tabBarActiveTintColor: "tomato",
-              tabBarInactiveTintColor: "gray",
-              headerShown: false,
-              tabBarLabel: "",
-            })}
-          >
-            <Tab.Screen name="new" component={NewAnimeScreen} />
-            <Tab.Screen name="Main" component={ChatScreen} />
-            <Tab.Screen name="profile" component={ProfileScreen} />
-          </Tab.Navigator>):(<SigningScreen/>)}
-          
+                  // You can return any component that you like here!
+                  return (
+                    header=='default'? <FontAwesome5 name={iconName} size={size} color={color} /> : null
+                  );
+                },
+                tabBarActiveTintColor: "tomato",
+                tabBarInactiveTintColor: "gray",
+                headerShown: false,
+                tabBarLabel: "",
+                tabBarStyle:  header=='hidden' && {display:'none'}
+              })}
+            >
+              <Tab.Screen name="new" component={NewAnimeScreen} />
+              <Tab.Screen name="Main" component={ChatScreen} />
+              <Tab.Screen name="profile" component={ProfileScreen} />
+            </Tab.Navigator>
+          ) : (
+            <SigningScreen />
+          )}
         </NavigationContainer>
       </PointState>
     </LogContext.Provider>
   );
 }
 
-export {LogContext};
+export { LogContext };
