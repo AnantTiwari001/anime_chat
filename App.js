@@ -30,13 +30,14 @@ import Page0 from "./Pages/Page0";
 import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Welcome from "./Pages/Welcome";
+import BuyCoinPage from "./Pages/NewTabPage";
 
 const NewAnime = createNativeStackNavigator();
 
 function NewAnimeScreen() {
   return (
     <NewAnime.Navigator screenOptions={{ headerShown: false }}>
-      <NewAnime.Screen name="newAnime" component={NewTabPage} />
+      <NewAnime.Screen name="newAnime" component={BuyCoinPage} />
       <NewAnime.Screen name="feedBack" component={Feedback} />
     </NewAnime.Navigator>
   );
@@ -137,6 +138,11 @@ export default function App() {
   const [login, setLogin] = useState(true);
   const [contactList, setContactList] = useState([]);
   const[header, setHeader]= useState('default') //blank and hidden
+  const [nav, setNav]= useState(true);
+
+  const handleSetNav=(newValue)=>{
+    setNav(newValue)
+  }
 
   const handleSetHeader=(newState)=>{
     setHeader(newState)
@@ -155,7 +161,8 @@ export default function App() {
       value={{
         Login: { value: login, setFunc: handleSetLogin },
         ContactList: { value: contactList, setFunc: handleSetContactList },
-        header:{value:header, setFunc:handleSetHeader}
+        header:{value:header, setFunc:handleSetHeader},
+        tab:{value:nav, setFunc:handleSetNav}
       }}
     >
       <PointState>

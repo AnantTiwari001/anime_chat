@@ -12,7 +12,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { CommonStyle, StyleValues } from "../assets/styles";
 import { LogContext } from "../App";
 
-const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
+const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc, focus, setfocus }) => {
   const logValue= useContext(LogContext);
   // const [text, setText] = useState('');
   return (
@@ -28,9 +28,9 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
         placeholderTextColor="rgba(0,0,0,0.5)"
         underlineColorAndroid="transparent"
         onSubmitEditing={ (text!='') && submitFunc}
-        onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!')}}
+        onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!'); logValue.tab.setFunc(false)}}
         blurOnSubmit={false}
-        onBlur={()=>{console.log('focus out!'); logValue.header.setFunc('blank')}}
+        onBlur={()=>{console.log('focus out!'); logValue.header.setFunc('blank'); logValue.tab.setFunc(true)}}
       />
     </View>
   );

@@ -47,7 +47,7 @@ const Setting = ({ navigation }) => {
           Version 4.157.1(310800)
         </Text>
         <TouchableOpacity style={styles.btn} onPress={handleLogOut} >
-          <Button title="Log Out" color={"blue"} />
+          <Text style={{color:'white', fontSize:17}} >Log Out</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     overflow: "hidden",
+    alignItems:'center',
     backgroundColor: "blue",
   },
 });

@@ -48,6 +48,8 @@ const ChatingPage = ({ navigation }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeMsg, setActiveMsg] = useState(null);
   const [replying, setReplying] = useState([false, ""]);
+  // const [bottomTab, setBottomTab]= useState(true);
+  
   const route = useRoute();
   const rough = async () => {
     const call = await fetch(
@@ -95,7 +97,7 @@ const ChatingPage = ({ navigation }) => {
     setPopupVisible(false);
   };
   useEffect(() => {
-    logValue.header.setFunc('blank');
+    logValue.header.setFunc('hidden');
   }, []);
   return (
     <SafeAreaView style={styles.container}>
@@ -176,6 +178,7 @@ const ChatingPage = ({ navigation }) => {
             submitFunc={handleSubmit}
           />
       </View>
+      {logValue.tab.value && (<View style={{width:'100%', height:60, borderTopWidth:1, borderColor:'gray', }} ></View>)}
     </SafeAreaView>
   );
 };
@@ -210,7 +213,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
     paddingTop: 20,
   },
   popMain: {
