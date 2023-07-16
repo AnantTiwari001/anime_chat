@@ -30,6 +30,7 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
         onSubmitEditing={submitFunc}
         onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!')}}
         blurOnSubmit={false}
+        onBlur={()=>{console.log('focus out!'); logValue.header.setFunc('blank')}}
       />
     </View>
   );
