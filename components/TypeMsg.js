@@ -29,6 +29,7 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc }) => {
         underlineColorAndroid="transparent"
         onSubmitEditing={submitFunc}
         onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!')}}
+        blurOnSubmit={false}
       />
     </View>
   );
