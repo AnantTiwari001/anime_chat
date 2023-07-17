@@ -19,26 +19,12 @@ import TypeMsg from "../components/TypeMsg";
 import { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import { AntDesign } from "@expo/vector-icons";
-import { Configuration, OpenAIApi } from "openai";
-import "url-polyfill";
 import PointContext from "../context/points/PointContext";
-import codegenNativeCommands from "react-native/Libraries/Utilities/codegenNativeCommands";
 import { LogContext } from "../App";
-// import { config } from 'dotenv';
+import WS from "react-native-websocket";
 
-const items = [
-  { msg: "whatever man0", time: "8:20 PM", isRecieve: true, uid: "msg01" },
-  { msg: "whatever man1", time: "8:20 PM", uid: "msg02" },
-  { msg: "whatever man2", time: "8:20 PM", isRecieve: true, uid: "msg03" },
-  { msg: "whatever man3", time: "8:20 PM", isRecieve: true, uid: "msg04" },
-  {
-    msg: "Jay shree Ram",
-    time: "8:20 PM",
-    isRecieve: true,
-    uid: "msg05",
-    isReply: "shree Ram",
-  },
-];
+const domain = 'anime-chatbot.onrender.com';
+const endpoint = `ws://${domain}/chat`;
 
 const ChatingPage = ({ navigation }) => {
   const Context = useContext(PointContext);
@@ -48,7 +34,8 @@ const ChatingPage = ({ navigation }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeMsg, setActiveMsg] = useState(null);
   const [replying, setReplying] = useState([false, ""]);
-  // const [bottomTab, setBottomTab]= useState(true);
+
+  const ws= new WS(endpoint);
   
   const route = useRoute();
   const rough = async () => {
@@ -67,6 +54,7 @@ const ChatingPage = ({ navigation }) => {
     setText(newText);
   };
   const handleSubmit = () => {
+    sendMessgae(text);
     if (Context.point.value > 0) {
       console.log("starting!", Context.point.value);
       const timeObj = new Date();
@@ -98,7 +86,50 @@ const ChatingPage = ({ navigation }) => {
   };
   useEffect(() => {
     logValue.header.setFunc('hidden');
+
+    ws.onmessage = (event) => {
+      // Not implementing adding to the screen as in msgArray coz don't know the aspecting value!!
+
+      const data = JSON.parse(event.data);
+      if(data.type=="start"){
+        // computing the message... thinking!!!
+      }else if(data.type=="stream"){
+        // send the msg... typing!!!
+      }else if(data.type=="info"){
+        // the info part
+      }else if(data.type=="end"){
+        // done with the message
+      }else if(data.type=="error"){
+        // some error occured
+      }
+    };
+
+    return () => {
+      ws.close();
+    };
   }, []);
+
+  const sendMessgae=(msg)=>{
+    ws.send(msg);
+  }
+
+  const addData=(text)=>{
+    fetch(addDataEndpoint, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: text }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(JSON.stringify(response));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
   return (
     <SafeAreaView style={styles.container}>
       {/* {popupVisible && <LongPressPop />} */}
@@ -180,32 +211,6 @@ const ChatingPage = ({ navigation }) => {
       </View>
       {logValue.tab.value && (<View style={{width:'100%', height:60, borderTopWidth:1, borderColor:'gray', }} ></View>)}
     </SafeAreaView>
-  );
-};
-
-const LongPressPop = () => {
-  return (
-    <View style={styles.popContainer}>
-      <View style={styles.popMain}>
-        <View style={styles.emoji}>
-          <TouchableOpacity>
-            <AntDesign name="like2" size={32} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <AntDesign name="heart" size={32} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <AntDesign name="smileo" size={32} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <AntDesign name="meh" size={32} color="black" />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.reply}>
-          <Text style={{ fontSize: 20 }}>Reply</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
   );
 };
 

@@ -1,11 +1,12 @@
-import {View, Text} from 'react-native';
+const rough= async ()=> {
+    const call = await fetch('https://anime-chatbot.onrender.com/upsert', {
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({name:'Hunter x Hunter'})
+    })
+    console.log(await call.json());
+};
 
-const Rough=()=>{
-    return(
-        <View style={{flex:1, backgroundColor:'tomato'}}>
-            <Text>Hello world</Text>
-        </View>
-    )
-}
-
-export default Rough;
+rough();

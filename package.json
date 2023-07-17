@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-push-notification": "^8.1.1",
+    "react-native-websocket": "^1.0.2",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
     "url-polyfill": "^1.1.12"
