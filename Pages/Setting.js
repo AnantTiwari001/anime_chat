@@ -5,9 +5,12 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
+  ToastAndroid,
 } from "react-native";
 import { LogContext } from "../App";
 import { useContext } from "react";
+import { signOut } from "firebase/auth";
+import auth from "../firebase/auth";
 
 
 const Setting = ({ navigation }) => {
@@ -25,8 +28,14 @@ const Setting = ({ navigation }) => {
   const logValue= useContext(LogContext);
 
   const handleLogOut=()=>{
-    console.log('hii bruh')
-    logValue.Login.setFunc();
+    // console.log('hii bruh')
+    signOut(auth).then(() => {
+      ToastAndroid.show("Logout Successful!", ToastAndroid.SHORT)
+      logValue.Login.setFunc();
+    }).catch((error) => {
+      // An error happened.
+      ToastAndroid.show("LogOut failed!", ToastAndroid.SHORT)
+    });
   }
 
   return (

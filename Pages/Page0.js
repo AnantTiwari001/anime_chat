@@ -7,8 +7,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import LogButton from "../components/LogButton";
+import { useContext } from "react";
+import { SignContext } from "../context/points/Signing";
 
 const Page0 = ({ navigation }) => {
+  const signContextValue= useContext(SignContext);
   return (
     <View style={styles.container}>
       <Text
@@ -19,10 +22,10 @@ const Page0 = ({ navigation }) => {
         Welcome
       </Text>
       <View style={styles.btnGroup}>
-        <TouchableOpacity onPress={()=>{navigation.navigate('sChoose')}} >
+        <TouchableOpacity onPress={()=>{navigation.navigate('sChoose'); signContextValue.account.setFunc('new')}} >
           <LogButton text={"Sign up"} dark={false} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{navigation.navigate('sChoose')}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('sChoose'); signContextValue.account.setFunc('old')}}>
           <LogButton text={"Sign in"} dark={true} />
         </TouchableOpacity>
       </View>

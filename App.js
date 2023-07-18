@@ -31,6 +31,7 @@ import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Welcome from "./Pages/Welcome";
 import BuyCoinPage from "./Pages/BuyCoinPage";
+import Signing from "./context/points/Signing";
 
 const NewAnime = createNativeStackNavigator();
 
@@ -81,12 +82,14 @@ const SigningStack = createNativeStackNavigator();
 
 function SigningScreen() {
   return (
-    <SigningStack.Navigator screenOptions={{ headerShown: false }}>
-      <ProfileStack.Screen name="sHome" component={Page0} />
-      <ProfileStack.Screen name="sChoose" component={Welcome} />
-      <ProfileStack.Screen name="signIn" component={SignInPage} />
-      <ProfileStack.Screen name="signUp" component={SignUpPage} />
-    </SigningStack.Navigator>
+    <Signing>
+      <SigningStack.Navigator screenOptions={{ headerShown: false }}>
+        <ProfileStack.Screen name="sHome" component={Page0} />
+        <ProfileStack.Screen name="sChoose" component={Welcome} />
+        <ProfileStack.Screen name="signIn" component={SignInPage} />
+        <ProfileStack.Screen name="signUp" component={SignUpPage} />
+      </SigningStack.Navigator>
+    </Signing>
   );
 }
 
@@ -135,7 +138,7 @@ export default function App() {
     });
   }, []);
 
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
   const [contactList, setContactList] = useState([]);
   const [header, setHeader] = useState("default"); //blank and hidden
   const [nav, setNav] = useState(true);
@@ -174,24 +177,30 @@ export default function App() {
                   let iconName;
 
                   if (route.name === "Credits") {
-                    iconName = "dollar"
+                    iconName = "dollar";
                   } else if (route.name === "Message") {
-                    iconName = "message1"
+                    iconName = "message1";
                   } else if (route.name === "Settings") {
-                    iconName = "setting"
+                    iconName = "setting";
                   }
 
                   // You can return any component that you like here!
                   return header == "default" ? (
-                    iconName=="dollar"?(<FontAwesome name="dollar" size={size} color={color} />):
-                    <AntDesign name={iconName} size={24} color={color} />
+                    iconName == "dollar" ? (
+                      <FontAwesome name="dollar" size={size} color={color} />
+                    ) : (
+                      <AntDesign name={iconName} size={24} color={color} />
+                    )
                   ) : null;
                 },
                 tabBarActiveTintColor: "tomato",
                 tabBarInactiveTintColor: "gray",
                 headerShown: false,
                 // tabBarLabel: "",
-                tabBarStyle: (header == "hidden") ? { display: "none", height:70, paddingBottom:10 }: {height:70, paddingBottom:10},
+                tabBarStyle:
+                  header == "hidden"
+                    ? { display: "none", height: 70, paddingBottom: 10 }
+                    : { height: 70, paddingBottom: 10 },
               })}
             >
               <Tab.Screen name="Message" component={ChatScreen} />
