@@ -54,7 +54,7 @@ const ChatingPage = ({ navigation }) => {
     setText(newText);
   };
   const handleSubmit = () => {
-    sendMessgae(text);
+    // sendMessgae(text);
     if (Context.point.value > 0) {
       console.log("starting!", Context.point.value);
       const timeObj = new Date();

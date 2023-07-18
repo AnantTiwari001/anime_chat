@@ -21,7 +21,7 @@ import SetReminder from "./Pages/notification/SetReminder";
 import Recommendations from "./Pages/notification/Recommendations";
 import LanguagePage from "./Pages/LanguagePage";
 import TermPage from "./Pages/TermPage";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import { useContext, useEffect, useState, createContext } from "react";
 import * as Notifications from "expo-notifications";
 import PointState from "./context/points/PointState";
@@ -30,7 +30,7 @@ import Page0 from "./Pages/Page0";
 import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Welcome from "./Pages/Welcome";
-import BuyCoinPage from "./Pages/NewTabPage";
+import BuyCoinPage from "./Pages/BuyCoinPage";
 
 const NewAnime = createNativeStackNavigator();
 
@@ -137,16 +137,16 @@ export default function App() {
 
   const [login, setLogin] = useState(true);
   const [contactList, setContactList] = useState([]);
-  const[header, setHeader]= useState('default') //blank and hidden
-  const [nav, setNav]= useState(true);
+  const [header, setHeader] = useState("default"); //blank and hidden
+  const [nav, setNav] = useState(true);
 
-  const handleSetNav=(newValue)=>{
-    setNav(newValue)
-  }
+  const handleSetNav = (newValue) => {
+    setNav(newValue);
+  };
 
-  const handleSetHeader=(newState)=>{
-    setHeader(newState)
-  }
+  const handleSetHeader = (newState) => {
+    setHeader(newState);
+  };
 
   const handleSetContactList = (newValue) => {
     setContactList(newValue);
@@ -161,8 +161,8 @@ export default function App() {
       value={{
         Login: { value: login, setFunc: handleSetLogin },
         ContactList: { value: contactList, setFunc: handleSetContactList },
-        header:{value:header, setFunc:handleSetHeader},
-        tab:{value:nav, setFunc:handleSetNav}
+        header: { value: header, setFunc: handleSetHeader },
+        tab: { value: nav, setFunc: handleSetNav },
       }}
     >
       <PointState>
@@ -173,29 +173,30 @@ export default function App() {
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
 
-                  if (route.name === "new") {
-                    iconName = focused ? "fire" : "fire-alt";
-                  } else if (route.name === "Main") {
-                    iconName = focused ? "heartbeat" : "heart";
-                  } else if (route.name === "profile") {
-                    iconName = focused ? "grin" : "grin-alt";
+                  if (route.name === "Credits") {
+                    iconName = "dollar"
+                  } else if (route.name === "Message") {
+                    iconName = "message1"
+                  } else if (route.name === "Settings") {
+                    iconName = "setting"
                   }
 
                   // You can return any component that you like here!
-                  return (
-                    header=='default'? <FontAwesome5 name={iconName} size={size} color={color} /> : null
-                  );
+                  return header == "default" ? (
+                    iconName=="dollar"?(<FontAwesome name="dollar" size={size} color={color} />):
+                    <AntDesign name={iconName} size={24} color={color} />
+                  ) : null;
                 },
                 tabBarActiveTintColor: "tomato",
                 tabBarInactiveTintColor: "gray",
                 headerShown: false,
-                tabBarLabel: "",
-                tabBarStyle:  header=='hidden' && {display:'none'}
+                // tabBarLabel: "",
+                tabBarStyle: (header == "hidden") ? { display: "none", height:70, paddingBottom:10 }: {height:70, paddingBottom:10},
               })}
             >
-              <Tab.Screen name="new" component={NewAnimeScreen} />
-              <Tab.Screen name="Main" component={ChatScreen} />
-              <Tab.Screen name="profile" component={ProfileScreen} />
+              <Tab.Screen name="Message" component={ChatScreen} />
+              <Tab.Screen name="Credits" component={NewAnimeScreen} />
+              <Tab.Screen name="Settings" component={ProfileScreen} />
             </Tab.Navigator>
           ) : (
             <SigningScreen />
