@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, ToastAndroid } from "r
 import { useState, useContext } from "react";
 import LogButton from "../components/LogButton";
 import Inputform from "../components/InputForm";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendSignInLinkToEmail } from "firebase/auth";
 import auth from "../firebase/auth";
 import { LogContext } from "../App";
 
@@ -12,6 +12,11 @@ const SignUpPage = () => {
   const [conformPassword, setConformPassword] = useState("");
   const logValue = useContext(LogContext);
 
+  const actionCodeSettings = {
+    url: 'https://livelinks1234.firebaseapp.com',
+    handleCodeInApp: true,
+  };
+
   const handleSignUp = () => {
     console.log("sign up!");
     createUserWithEmailAndPassword(auth, email, password)
@@ -20,7 +25,10 @@ const SignUpPage = () => {
         const user = userCredential.user;
         console.log(userCredential);
         ToastAndroid.show("SignUp Success!", ToastAndroid.SHORT);
-        logValue.Login.setFunc()
+        // console.log('verify email:',auth.currentUser.sendEmailVerification())
+        sendSignInLinkToEmail(auth,email,actionCodeSettings).then((res)=>console.log('verification: ', res)).catch((err)=>console.log("error:  ", err))
+        ToastAndroid.show("Sending ", ToastAndroid.SHORT);
+        // logValue.Login.setFunc()
         // ...
       })
       .catch((error) => {

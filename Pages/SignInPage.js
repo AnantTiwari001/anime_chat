@@ -51,7 +51,7 @@ const SignInPage = () => {
           textInput={password}
           setFunction={(newText) => setPassword(newText)}
         />
-        <Text style={styles.forgot} onPress={()=>ToastAndroid.show("hello world", ToastAndroid.SHORT)} >Forgot Password?</Text>
+        <Text style={styles.forgot} onPress={()=>console.log('currentUser here:',auth.currentUser)} >Forgot Password?</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <LogButton text={"Sign in"} dark={true} />
