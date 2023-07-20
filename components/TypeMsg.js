@@ -27,10 +27,10 @@ const TypeMsg = ({ text, setFunction, placeholderText, icon, submitFunc, focus, 
         placeholder={placeholderText}
         placeholderTextColor="rgba(0,0,0,0.5)"
         underlineColorAndroid="transparent"
-        onSubmitEditing={ (text!='') && submitFunc}
+        onSubmitEditing={()=>{(text !='' && submitFunc())}}
         onFocus={()=>{logValue.header.setFunc('hidden'); console.log('input active!'); logValue.tab.setFunc(false)}}
         blurOnSubmit={false}
-        onBlur={()=>{console.log('focus out!'); logValue.header.setFunc('blank'); logValue.tab.setFunc(true)}}
+        onBlur={()=>{console.log('focus out!'); logValue.header.setFunc('hidden'); logValue.tab.setFunc(true)}}
       />
     </View>
   );

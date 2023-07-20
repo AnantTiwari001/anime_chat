@@ -21,12 +21,20 @@ import Header from "../components/Header";
 import { AntDesign } from "@expo/vector-icons";
 import PointContext from "../context/points/PointContext";
 import { LogContext } from "../App";
-import WS from "react-native-websocket";
-
-const domain = 'anime-chatbot.onrender.com';
-const endpoint = `ws://${domain}/chat`;
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import app from "../firebase/config";
+import auth from "../firebase/auth";
 
 const ChatingPage = ({ navigation }) => {
+  // firestore
+  const db = getFirestore(app);
+
   const Context = useContext(PointContext);
   const logValue = useContext(LogContext);
   const [msgArray, setMsgArray] = useState([]);
@@ -35,15 +43,13 @@ const ChatingPage = ({ navigation }) => {
   const [activeMsg, setActiveMsg] = useState(null);
   const [replying, setReplying] = useState([false, ""]);
 
-  const ws= new WS(endpoint);
-  
   const route = useRoute();
   const rough = async () => {
-    const call = await fetch(
-      "http://api.openweathermap.org/geo/1.0/direct?q=birgunj&appid=fc80203da81b326a508f73b26f9b742e"
-    );
+    // const call = await fetch(
+    //   "http://api.openweathermap.org/geo/1.0/direct?q=birgunj&appid=fc80203da81b326a508f73b26f9b742e"
+    // );
     // console.log(await call.json())
-    console.log(Context.point.value);
+    // console.log(Context.point.value);
   };
   const handleLongPress = (index) => {
     console.log("hello world");
@@ -53,10 +59,27 @@ const ChatingPage = ({ navigation }) => {
   const handleInput = (newText) => {
     setText(newText);
   };
+
+  const docRef = doc(db, "chat", auth.currentUser.uid);
+  const sendData = async () => {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      // console.log('doc data: ', docSnap.data());
+      let data = docSnap.data();
+      data.chatArray.push({ role: "user", content: text });
+      await setDoc(doc(db, "chat", auth.currentUser.uid), data);
+    } else {
+      console.log("No document avialable!");
+      await setDoc(doc(db, "chat", auth.currentUser.uid), {
+        chatArray: [{ role: "user", content: text }],
+      });
+    }
+  };
+  // update()
+
   const handleSubmit = () => {
     // sendMessgae(text);
     if (Context.point.value > 0) {
-      console.log("starting!", Context.point.value);
       const timeObj = new Date();
       let time = "";
       timeObj.getHours() > 12
@@ -71,6 +94,7 @@ const ChatingPage = ({ navigation }) => {
             timeObj.getMinutes().toString() +
             "AM");
       msgArray.push({ msg: text, time: time, isReply: replying[1] });
+      sendData();
       setText("");
       setReplying(false, "");
       Context.point.setFunc(Context.point.value - 1);
@@ -85,51 +109,35 @@ const ChatingPage = ({ navigation }) => {
     setPopupVisible(false);
   };
   useEffect(() => {
-    logValue.header.setFunc('hidden');
-
-    ws.onmessage = (event) => {
-      // Not implementing adding to the screen as in msgArray coz don't know the aspecting value!!
-
-      const data = JSON.parse(event.data);
-      if(data.type=="start"){
-        // computing the message... thinking!!!
-      }else if(data.type=="stream"){
-        // send the msg... typing!!!
-      }else if(data.type=="info"){
-        // the info part
-      }else if(data.type=="end"){
-        // done with the message
-      }else if(data.type=="error"){
-        // some error occured
+    logValue.header.setFunc("hidden");
+    const unsub = onSnapshot(
+      doc(getFirestore(app), "chat", auth.currentUser.uid),
+      (doc) => {
+        console.log("Current data: ", doc.data());
+        let data= doc.data().chatArray;
+        console.log('array: ', data[data.length-1].content)
+        console.log('hlo', msgArray[msgArray.length-1].msg)
+        if(data[data.length-1].content== msgArray[msgArray.length-1].msg){
+          console.log('same thing');
+        }else{
+          let time = "";
+      timeObj.getHours() > 12
+        ? (time =
+            (timeObj.getHours() - 12).toString() +
+            ":" +
+            timeObj.getMinutes().toString() +
+            " PM")
+        : (time =
+            timeObj.getHours().toString() +
+            ":" +
+            timeObj.getMinutes().toString() +
+            "AM");
+          msgArray.push({ msg: data[data.length-1].content, time: time, isReply: true });
+        }
       }
-    };
-
-    return () => {
-      ws.close();
-    };
+    );
   }, []);
 
-  const sendMessgae=(msg)=>{
-    ws.send(msg);
-  }
-
-  const addData=(text)=>{
-    fetch(addDataEndpoint, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: text }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(JSON.stringify(response));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
   return (
     <SafeAreaView style={styles.container}>
       {/* {popupVisible && <LongPressPop />} */}
@@ -201,15 +209,24 @@ const ChatingPage = ({ navigation }) => {
             <Text style={{ borderLeftWidth: 1 }}> {replying[1]} </Text>
           </View>
         )}
-          <TypeMsg
-            text={text}
-            setFunction={(newText) => handleInput(newText)}
-            placeholderText={"message"}
-            icon={"images"}
-            submitFunc={handleSubmit}
-          />
+        <TypeMsg
+          text={text}
+          setFunction={(newText) => handleInput(newText)}
+          placeholderText={"message"}
+          icon={"images"}
+          submitFunc={handleSubmit}
+        />
       </View>
-      {logValue.tab.value && (<View style={{width:'100%', height:60, borderTopWidth:1, borderColor:'gray', }} ></View>)}
+      {logValue.tab.value && (
+        <View
+          style={{
+            width: "100%",
+            height: 60,
+            borderTopWidth: 1,
+            borderColor: "gray",
+          }}
+        ></View>
+      )}
     </SafeAreaView>
   );
 };
