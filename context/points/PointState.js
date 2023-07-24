@@ -3,7 +3,7 @@ import PointContext from "./PointContext";
 
 const PointState = (props) => {
   // const state= 12;
-  const [point, setPoint] = useState(15);
+  const [point, setPoint] = useState(null);
   const [rough, setRough] = useState("whatever");
 
   const [login, setLogin] = useState(false);

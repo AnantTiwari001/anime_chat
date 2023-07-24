@@ -3,10 +3,25 @@ import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import LogButton from "../components/LogButton";
 import { CommonStyle, StyleValues } from "../assets/styles";
 import PointContext from "../context/points/PointContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import app from "../firebase/config";
+import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import auth from "../firebase/auth";
+
 
 const BuyCoinPage = () => {
   const Point= useContext(PointContext);
+
+  const db= getFirestore(app);
+
+  useEffect(()=>{
+    const docRef= doc(db, "Credit", auth.currentUser.uid);
+    const unsub=onSnapshot(docRef,(doc)=>{
+      let data=doc.data();
+      // if(Point.point.value==)
+      Point.point.setFunc(data.points)
+    })
+  },[]);
   return (
     <View style={[CommonStyle.container,{padding:StyleValues.paddingMargin[3]}]}>
       <View>

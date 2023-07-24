@@ -7,17 +7,28 @@ import {
   TouchableOpacity,
 } from "react-native";
 import LogButton from "../components/LogButton";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SignContext } from "../context/points/Signing";
+import auth from "../firebase/auth";
+import { LogContext } from "../App";
 
 const Page0 = ({ navigation }) => {
   const signContextValue= useContext(SignContext);
+  const logValue= useContext(LogContext);
+  useEffect(()=>{
+    // if(auth.currentUser){
+    //   // logValue.Login.setFunc();
+    //   console.log('hello world')
+    // }
+    // logValue.Login.setFunc();
+  },[])
   return (
     <View style={styles.container}>
       <Text
         style={{
           alignSelf: "center",
         }}
+        onPress={()=>console.log(auth.currentUser)}
       >
         Welcome
       </Text>

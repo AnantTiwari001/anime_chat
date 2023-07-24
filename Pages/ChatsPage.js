@@ -16,7 +16,7 @@ import {
 import { useRoute } from "@react-navigation/native";
 import Message from "../components/Message";
 import TypeMsg from "../components/TypeMsg";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import Header from "../components/Header";
 import { AntDesign } from "@expo/vector-icons";
 import PointContext from "../context/points/PointContext";
@@ -27,6 +27,7 @@ import {
   setDoc,
   getDoc,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import app from "../firebase/config";
 import auth from "../firebase/auth";
@@ -52,7 +53,6 @@ const ChatingPage = ({ navigation }) => {
     // console.log(Context.point.value);
   };
   const handleLongPress = (index) => {
-    console.log("hello world");
     setPopupVisible(true);
     setActiveMsg(index);
   };
@@ -60,48 +60,57 @@ const ChatingPage = ({ navigation }) => {
     setText(newText);
   };
 
-  const docRef = doc(db, "chat", auth.currentUser.uid);
-  const sendData = async () => {
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      // console.log('doc data: ', docSnap.data());
-      let data = docSnap.data();
-      data.chatArray.push({ role: "user", content: text });
-      await setDoc(doc(db, "chat", auth.currentUser.uid), data);
-    } else {
-      console.log("No document avialable!");
-      await setDoc(doc(db, "chat", auth.currentUser.uid), {
-        chatArray: [{ role: "user", content: text }],
-      });
-    }
+  const formatedTime = () => {
+    const timeObj = new Date();
+    let time = "";
+    timeObj.getHours() > 12
+      ? (time =
+          (timeObj.getHours() - 12).toString() +
+          ":" +
+          timeObj.getMinutes().toString() +
+          " PM")
+      : (time =
+          timeObj.getHours().toString() +
+          ":" +
+          timeObj.getMinutes().toString() +
+          "AM");
+    return time;
   };
+
   // update()
 
   const handleSubmit = () => {
     // sendMessgae(text);
     if (Context.point.value > 0) {
-      const timeObj = new Date();
-      let time = "";
-      timeObj.getHours() > 12
-        ? (time =
-            (timeObj.getHours() - 12).toString() +
-            ":" +
-            timeObj.getMinutes().toString() +
-            " PM")
-        : (time =
-            timeObj.getHours().toString() +
-            ":" +
-            timeObj.getMinutes().toString() +
-            "AM");
-      msgArray.push({ msg: text, time: time, isReply: replying[1] });
-      sendData();
+      // msgArray.push({ msg: text, time: formatedTime(), isReply: replying[1] });
+      sendData({msg:text, time:formatedTime(), isReply: false});
+      setMsgArray([...msgArray, {msg:text, time:formatedTime(), isReply: false}])
       setText("");
       setReplying(false, "");
       Context.point.setFunc(Context.point.value - 1);
     } else Alert.alert("not enough credits! consider buying more!");
   };
+
+  const docRef = doc(db, "Chat", auth.currentUser.uid);
+  const sendData = async (params) => {
+    // console.log("send data!");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.data()) {
+      // console.log("the doc exist man", docSnap.data());
+      let data = docSnap.data();
+      data[route.params.name] = [
+        ...msgArray, params
+      ];
+      // console.log("shree Ram: ", data);
+      await setDoc(doc(db, "Chat", auth.currentUser.uid), data);
+      // serverResponse(auth.currentUser.uid, route.params.name);
+    } else {
+      console.log("doc donnot exist");
+    }
+  };
   const handleReact = (emoji) => {
     msgArray[activeMsg].emoji = emoji;
+    setMsgArray([...msgArray]);
     setPopupVisible(false);
   };
   const handleReply = () => {
@@ -110,33 +119,34 @@ const ChatingPage = ({ navigation }) => {
   };
   useEffect(() => {
     logValue.header.setFunc("hidden");
-    const unsub = onSnapshot(
-      doc(getFirestore(app), "chat", auth.currentUser.uid),
-      (doc) => {
-        console.log("Current data: ", doc.data());
-        let data= doc.data().chatArray;
-        console.log('array: ', data[data.length-1].content)
-        console.log('hlo', msgArray[msgArray.length-1].msg)
-        if(data[data.length-1].content== msgArray[msgArray.length-1].msg){
-          console.log('same thing');
-        }else{
-          let time = "";
-      timeObj.getHours() > 12
-        ? (time =
-            (timeObj.getHours() - 12).toString() +
-            ":" +
-            timeObj.getMinutes().toString() +
-            " PM")
-        : (time =
-            timeObj.getHours().toString() +
-            ":" +
-            timeObj.getMinutes().toString() +
-            "AM");
-          msgArray.push({ msg: data[data.length-1].content, time: time, isReply: true });
+      const unsub = onSnapshot(docRef, (doc) => {
+        // console.log("current data: ", doc.data());
+        let data = doc.data()[route.params.name];
+        console.log('updating chat Page!');
+        if(!(JSON.stringify(data)==JSON.stringify(msgArray))){
+          console.log('Same not updating')
+          setMsgArray(data);
         }
+        })
+  }, []);
+
+  // useEffect(()=>{
+  //   console.log('change!');
+  //   sendData();
+  // },[msgArray])
+
+  const serverResponse = async (uid, animeName) => {
+    await fetch(
+      "https://us-central1-master-streamer-393513.cloudfunctions.net/function-1",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: animeName, uid: uid }),
       }
     );
-  }, []);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
