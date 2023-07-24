@@ -81,14 +81,12 @@ const ChatingPage = ({ navigation }) => {
 
   const handleSubmit = () => {
     // sendMessgae(text);
-    if (Context.point.value > 0) {
       // msgArray.push({ msg: text, time: formatedTime(), isReply: replying[1] });
       sendData({msg:text, time:formatedTime(), isReply: false});
       setMsgArray([...msgArray, {msg:text, time:formatedTime(), isReply: false}])
       setText("");
       setReplying(false, "");
       Context.point.setFunc(Context.point.value - 1);
-    } else Alert.alert("not enough credits! consider buying more!");
   };
 
   const docRef = doc(db, "Chat", auth.currentUser.uid);
@@ -182,7 +180,7 @@ const ChatingPage = ({ navigation }) => {
       <Header navigation={navigation} profile={route.params} absolute={true} />
       {/* {console.log('hello world',route.params)} */}
       <ScrollView style={{ paddingTop: 30 }}>
-        {msgArray.map((item, index) => (
+        { msgArray && msgArray.map((item, index) => (
           <TouchableOpacity
             key={index}
             onPress={rough}

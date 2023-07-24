@@ -18,6 +18,7 @@ const BuyCoinPage = () => {
     const docRef= doc(db, "Credit", auth.currentUser.uid);
     const unsub=onSnapshot(docRef,(doc)=>{
       let data=doc.data();
+      console.log('',data)
       // if(Point.point.value==)
       Point.point.setFunc(data.points)
     })

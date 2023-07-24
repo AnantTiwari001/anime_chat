@@ -58,6 +58,19 @@ const MainPage = ({ navigation }) => {
 
   const handleNew = () => {
     // navigation.navigate('first')
+    const timeObj = new Date();
+  let time = "";
+  timeObj.getHours() > 12
+    ? (time =
+        (timeObj.getHours() - 12).toString() +
+        ":" +
+        timeObj.getMinutes().toString() +
+        " PM")
+    : (time =
+        timeObj.getHours().toString() +
+        ":" +
+        timeObj.getMinutes().toString() +
+        "AM");
     console.log('new chat!');
     logValue.ContactList.setFunc([...logValue.ContactList.value, {
       name: name,
